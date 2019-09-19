@@ -1,7 +1,7 @@
 (define (ensure-int x)
   (if (char? x) (char->integer x) x))
 
-(define (ascii-base-offset-limit x base offset limit)
+(define (base-offset-limit x base offset limit)
   (let ((cc (ensure-int x)))
     (and (>= cc base) (< cc (+ base limit))
          (+ offset (- cc base)))))
@@ -61,13 +61,13 @@
 ;;
 
 (define (ascii-digit-value x limit)
-  (ascii-base-offset-limit x #x30 0 (min limit 10)))
+  (base-offset-limit x #x30 0 (min limit 10)))
 
 (define (ascii-upper-case-value x offset limit)
-  (ascii-base-offset-limit x #x41 offset (min limit 26)))
+  (base-offset-limit x #x41 offset (min limit 26)))
 
 (define (ascii-lower-case-value x offset limit)
-  (ascii-base-offset-limit x #x61 offset (min limit 26)))
+  (base-offset-limit x #x61 offset (min limit 26)))
 
 (define (ascii-nth-digit n)
   (integer->char (+ #x30 (modulo n 10))))
