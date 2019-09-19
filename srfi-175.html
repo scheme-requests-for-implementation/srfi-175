@@ -486,7 +486,7 @@
   <p>The case conversion procedures in this SRFI can be implemented
   in terms of the letter transformation procedures. For the sake of
   simplicity, the following examples do not take
-  number-to-character conversion into account.</p>
+  fixnum-to-character conversion into account.</p>
   <pre>
 <code>(define (my-upcase char)   (or (ascii-lower-case-value char #x41 26) char))
 (define (my-downcase char) (or (ascii-upper-case-value char #x61 26) char))</code></pre>
