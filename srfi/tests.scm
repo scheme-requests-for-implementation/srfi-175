@@ -75,6 +75,10 @@
            (want #f (ascii-punctuation? cc))))
     (loop (+ cc 1))))
 
+(want #f (ascii-char? -1))
+(want #f (ascii-char? #x80))
+(want #f (ascii-char? (integer->char #x80)))
+
 (want 0 (ascii-digit-value #\0 10))
 
 (want 0 (ascii-upper-case-value #\A 0 26))
