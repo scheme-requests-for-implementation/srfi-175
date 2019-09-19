@@ -526,10 +526,10 @@
       char))</code></pre>
   <h3>Strings utility</h3>
   <p>The Unix <code>strings</code> utility reads a binary file,
-  looking for contiguous sequences of ASCII bytes and showing each
-  sequence as it is found. The idea is to find human-readable text
-  in the file. The following is the main loop of
-  <code>strings</code>. It relies on a <code>show</code> helper
+  looking for contiguous sequences of displayable ASCII bytes and
+  showing each sequence as it is found. The idea is to find
+  human-readable text in the file. The following is the main loop
+  of <code>strings</code>. It relies on a <code>show</code> helper
   procedure that displays <code>(list-&gt;string (map
   integer-&gt;char (reverse stride)))</code> if <code>stride</code>
   is at least 4 bytes long.</p>
