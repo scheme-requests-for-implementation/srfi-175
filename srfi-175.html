@@ -493,8 +493,8 @@
   <h3>Number parsing</h3>
   <p>Since there are lots of slightly different number syntaxes,
   this SRFI does not provide procedures to convert between numbers
-  and strings. Instead, the rotation procedures let you easily roll
-  your own. Here is one way to do it:</p>
+  and strings. Instead, the transformation procedures let you
+  easily roll your own. Here is one way to do it:</p>
   <pre>
 <code>(define (parse-binary-digit  char) (ascii-digit-value char 2))
 (define (parse-octal-digit   char) (ascii-digit-value char 8))
