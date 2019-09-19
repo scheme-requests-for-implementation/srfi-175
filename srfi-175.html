@@ -1,11 +1,13 @@
 <!DOCTYPE html>
 <html>
 <head>
-  <meta charset="utf-8" />
+  <meta charset="utf-8">
   <title>SRFI 175: ASCII character library</title>
-  <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <link rel="stylesheet" href="/srfi.css" type="text/css" />
-  <link href="/favicon.png" rel="icon" sizes="192x192" type="image/png" />
+  <meta name="viewport" content=
+  "width=device-width, initial-scale=1">
+  <link rel="stylesheet" href="/srfi.css" type="text/css">
+  <link href="/favicon.png" rel="icon" sizes="192x192" type=
+  "image/png">
 </head>
 <body>
   <h2>Title</h2>
@@ -13,8 +15,16 @@
   <h2>Author</h2>
   <p>Lassi Kortela</p>
   <h1>Status</h1>
-
-  <p>This SRFI is currently in <em>draft</em> status.  Here is <a href="https://srfi.schemers.org/srfi-process.html">an explanation</a> of each status that a SRFI can hold.  To provide input on this SRFI, please send email to <code><a href="mailto:srfi+minus+175+at+srfi+dotschemers+dot+org">srfi-175@<span class="antispam">nospam</span>srfi.schemers.org</a></code>.  To subscribe to the list, follow <a href="https://srfi.schemers.org/srfi-list-subscribe.html">these instructions</a>.  You can access previous messages via the mailing list <a href="https://srfi-email.schemers.org/srfi-175">archive</a>.</p>
+  <p>This SRFI is currently in <em>draft</em> status. Here is
+  <a href="https://srfi.schemers.org/srfi-process.html">an
+  explanation</a> of each status that a SRFI can hold. To provide
+  input on this SRFI, please send email to <code><a href=
+  "mailto:srfi+minus+175+at+srfi+dotschemers+dot+org">srfi-175@<span class="antispam">nospam</span>srfi.schemers.org</a></code>.
+  To subscribe to the list, follow <a href=
+  "https://srfi.schemers.org/srfi-list-subscribe.html">these
+  instructions</a>. You can access previous messages via the
+  mailing list <a href=
+  "https://srfi-email.schemers.org/srfi-175">archive</a>.</p>
   <ul>
     <li>Received: 2019/9/15</li>
     <li>60-day deadline: 2019/11/17</li>
@@ -155,8 +165,8 @@
       </tr>
     </tbody>
   </table>
-  <p><sup>*</sup>Note that the <strong>ascii-digit-value</strong> procedure
-  takes a <em>limit</em> argument that the standard
+  <p><sup>*</sup>Note that the <strong>ascii-digit-value</strong>
+  procedure takes a <em>limit</em> argument that the standard
   <strong>digit-value</strong> procedure does not take.</p>
   <p>The standard Scheme procedures listed above require their
   arguments to be character objects. The equivalents in this SRFI
@@ -533,9 +543,9 @@
           (else
            (loop (cons byte stride))))))</code></pre>
   <h2>Implementation</h2>
-  <p>A sample implementation is available at
-    <a href="https://github.com/scheme-requests-for-implementation/srfi-175">https://github.com/scheme-requests-for-implementation/srfi-175</a>. It
-  provides two equivalent libraries: one for R<sup>6</sup>RS and
+  <p>A sample implementation is available at <a href=
+  "https://github.com/scheme-requests-for-implementation/srfi-175">https://github.com/scheme-requests-for-implementation/srfi-175</a>.
+  It provides two equivalent libraries: one for R<sup>6</sup>RS and
   one for R<sup>7</sup>RS. Each library depends only on standard
   language features. The R<sup>6</sup>RS library uses number
   procedures specialized for fixnums. A test suite as well as
