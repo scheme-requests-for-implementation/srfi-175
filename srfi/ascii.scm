@@ -70,7 +70,7 @@
   (base-offset-limit x #x61 offset (min limit 26)))
 
 (define (ascii-nth-digit n)
-  (integer->char (+ #x30 (modulo n 10))))
+  (and (<= 0 n 9) (integer->char (+ #x30 n))))
 
 (define (ascii-nth-upper-case n)
   (integer->char (+ #x41 (modulo n 26))))
