@@ -1,6 +1,6 @@
 #!r6rs
 ;; Automatically generated
-(import (rnrs) (ascii))
+(import (rnrs) (srfi :175))
 (define (hex-digit char)
   (or (ascii-digit-value char 10)
       (ascii-upper-case-value char 10 6)

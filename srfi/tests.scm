@@ -1,4 +1,4 @@
-(import (scheme base) (scheme file) (scheme read) (scheme write) (ascii))
+(import (scheme base) (scheme file) (scheme read) (scheme write) (srfi 175))
 
 (define-syntax want
   (syntax-rules ()
@@ -75,7 +75,25 @@
            (want #f (ascii-punctuation? cc))))
     (loop (+ cc 1))))
 
+(want #f (ascii-char? -1))
+(want #f (ascii-char? #x80))
+(want #f (ascii-char? (integer->char #x80)))
+
+(want #f (ascii-control? -1))
+(want #t (ascii-control? #x00))
+(want #t (ascii-control? #x1f))
+(want #f (ascii-control? #x20))
+(want #f (ascii-control? #x7e))
+(want #t (ascii-control? #x7f))
+(want #f (ascii-control? #x80))
+
 (want 0 (ascii-digit-value #\0 10))
+(want 0 (ascii-digit-value #\0 1))
+(want #f (ascii-digit-value #\0 0))
+(want #f (ascii-digit-value #\0 -1))
+(want 7 (ascii-digit-value #\7 8))
+(want #f (ascii-digit-value #\7 7))
+(want #f (ascii-digit-value #\: 10))
 
 (want 0 (ascii-upper-case-value #\A 0 26))
 (want 25 (ascii-upper-case-value #\Z 0 26))
@@ -90,9 +108,20 @@
 (want #f (ascii-lower-case-value #\a 0 -1))
 (want 9001 (ascii-lower-case-value #\b 9000 2))
 
+(want #f (ascii-nth-digit -1))
 (want #\0 (ascii-nth-digit 0))
+(want #\9 (ascii-nth-digit 9))
+(want #f (ascii-nth-digit 10))
+
+(want #\Z (ascii-nth-upper-case -1))
 (want #\A (ascii-nth-upper-case 0))
+(want #\Z (ascii-nth-upper-case 25))
+(want #\A (ascii-nth-upper-case 26))
+
+(want #\z (ascii-nth-lower-case -1))
 (want #\a (ascii-nth-lower-case 0))
+(want #\z (ascii-nth-lower-case 25))
+(want #\a (ascii-nth-lower-case 26))
 
 (define (count-matching predicates value)
   (let loop ((ps predicates) (n 0))
@@ -120,13 +149,13 @@
 (want #t (union? ascii-alphanumeric? ascii-alphabetic? decimal-numeric?))
 (want #t (union? ascii-alphabetic? ascii-upper-case? ascii-lower-case?))
 
-(subset? ascii-space-or-tab?  ascii-whitespace?)
-(subset? ascii-punctuation?   ascii-display?)
-(subset? ascii-upper-case?    ascii-alphabetic? ascii-display?)
-(subset? ascii-lower-case?    ascii-alphabetic? ascii-display?)
-(subset? ascii-alphabetic?    ascii-alphanumeric? ascii-display?)
-(subset? decimal-numeric?     ascii-alphanumeric? ascii-display?)
-(subset? ascii-alphanumeric?  ascii-display?)
+(want #t (subset? ascii-space-or-tab?  ascii-whitespace?))
+(want #t (subset? ascii-punctuation?   ascii-display?))
+(want #t (subset? ascii-upper-case?    ascii-alphabetic? ascii-display?))
+(want #t (subset? ascii-lower-case?    ascii-alphabetic? ascii-display?))
+(want #t (subset? ascii-alphabetic?    ascii-alphanumeric? ascii-display?))
+(want #t (subset? decimal-numeric?     ascii-alphanumeric? ascii-display?))
+(want #t (subset? ascii-alphanumeric?  ascii-display?))
 
 (want #t (disjoint? ascii-control? ascii-display?))
 (want #t (disjoint? ascii-whitespace?

@@ -1,33 +1,43 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
 <head>
-  <meta charset="utf-8" />
+  <meta charset="utf-8">
   <title>SRFI 175: ASCII character library</title>
-  <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <link rel="stylesheet" href="/srfi.css" type="text/css" />
-  <link href="/favicon.png" rel="icon" sizes="192x192" type="image/png" />
+  <meta name="viewport" content=
+  "width=device-width, initial-scale=1">
+  <link rel="stylesheet" href="/srfi.css" type="text/css">
+  <link href="/favicon.png" rel="icon" sizes="192x192" type=
+  "image/png">
 </head>
 <body>
   <h2>Title</h2>
   <p>SRFI 175: <strong>ASCII character library</strong></p>
   <h2>Author</h2>
   <p>Lassi Kortela</p>
-  <h1>Status</h1>
-
-  <p>This SRFI is currently in <em>draft</em> status.  Here is <a href="https://srfi.schemers.org/srfi-process.html">an explanation</a> of each status that a SRFI can hold.  To provide input on this SRFI, please send email to <code><a href="mailto:srfi+minus+175+at+srfi+dotschemers+dot+org">srfi-175@<span class="antispam">nospam</span>srfi.schemers.org</a></code>.  To subscribe to the list, follow <a href="https://srfi.schemers.org/srfi-list-subscribe.html">these instructions</a>.  You can access previous messages via the mailing list <a href="https://srfi-email.schemers.org/srfi-175">archive</a>.</p>
+  <h2>Status</h2>
+  <p>This SRFI is currently in <em>draft</em> status. Here is
+  <a href="https://srfi.schemers.org/srfi-process.html">an
+  explanation</a> of each status that a SRFI can hold. To provide
+  input on this SRFI, please send email to <code><a href=
+  "mailto:srfi+minus+175+at+srfi+dotschemers+dot+org">srfi-175@<span class="antispam">nospam</span>srfi.schemers.org</a></code>.
+  To subscribe to the list, follow <a href=
+  "https://srfi.schemers.org/srfi-list-subscribe.html">these
+  instructions</a>. You can access previous messages via the
+  mailing list <a href=
+  "https://srfi-email.schemers.org/srfi-175">archive</a>.</p>
   <ul>
     <li>Received: 2019/9/15</li>
     <li>60-day deadline: 2019/11/17</li>
     <li>Draft #1 published: 2019/9/18</li>
   </ul>
-  <p>Draft</p>
   <h2>Abstract</h2>
   <p>This SRFI defines ASCII-only equivalents to many of the
   character procedures in standard Scheme plus a few extra ones.
   Recent Scheme standards are based around Unicode but the
   significant syntactic elements in many file formats and network
-  protocols are all ASCII. Such low-level code can be faster and
-  easier to understand with ASCII primitives.</p>
+  protocols are all ASCII. Such low-level code can run faster and
+  its behavior can be easier to understand when it uses ASCII
+  primitives.</p>
   <h2>Rationale</h2>
   <p>Procedures dealing with character objects have been included
   in standard Scheme since R<sup>2</sup>RS (1985) with identical
@@ -155,8 +165,8 @@
       </tr>
     </tbody>
   </table>
-  <p><sup>*</sup>Note that the <strong>ascii-digit-value</strong> procedure
-  takes a <em>limit</em> argument that the standard
+  <p><sup>*</sup>Note that the <strong>ascii-digit-value</strong>
+  procedure takes a <em>limit</em> argument that the standard
   <strong>digit-value</strong> procedure does not take.</p>
   <p>The standard Scheme procedures listed above require their
   arguments to be character objects. The equivalents in this SRFI
@@ -476,15 +486,15 @@
   <p>The case conversion procedures in this SRFI can be implemented
   in terms of the letter transformation procedures. For the sake of
   simplicity, the following examples do not take
-  number-to-character conversion into account.</p>
+  fixnum-to-character conversion into account.</p>
   <pre>
 <code>(define (my-upcase char)   (or (ascii-lower-case-value char #x41 26) char))
 (define (my-downcase char) (or (ascii-upper-case-value char #x61 26) char))</code></pre>
   <h3>Number parsing</h3>
   <p>Since there are lots of slightly different number syntaxes,
   this SRFI does not provide procedures to convert between numbers
-  and strings. Instead, the rotation procedures let you easily roll
-  your own. Here is one way to do it:</p>
+  and strings. Instead, the transformation procedures let you
+  easily roll your own. Here is one way to do it:</p>
   <pre>
 <code>(define (parse-binary-digit  char) (ascii-digit-value char 2))
 (define (parse-octal-digit   char) (ascii-digit-value char 8))
@@ -516,10 +526,10 @@
       char))</code></pre>
   <h3>Strings utility</h3>
   <p>The Unix <code>strings</code> utility reads a binary file,
-  looking for contiguous sequences of ASCII bytes and showing each
-  sequence as it is found. The idea is to find human-readable text
-  in the file. The following is the main loop of
-  <code>strings</code>. It relies on a <code>show</code> helper
+  looking for contiguous sequences of displayable ASCII bytes and
+  showing each sequence as it is found. The idea is to find
+  human-readable text in the file. The following is the main loop
+  of <code>strings</code>. It relies on a <code>show</code> helper
   procedure that displays <code>(list-&gt;string (map
   integer-&gt;char (reverse stride)))</code> if <code>stride</code>
   is at least 4 bytes long.</p>
@@ -533,9 +543,10 @@
           (else
            (loop (cons byte stride))))))</code></pre>
   <h2>Implementation</h2>
-  <p>A sample implementation is available at
-    <a href="https://github.com/scheme-requests-for-implementation/srfi-175">https://github.com/scheme-requests-for-implementation/srfi-175</a>. It
-  provides two equivalent libraries: one for R<sup>6</sup>RS and
+  <p>A sample implementation is available at <a class="eponymous"
+  href=
+  "https://github.com/scheme-requests-for-implementation/srfi-175">https://github.com/scheme-requests-for-implementation/srfi-175</a>.
+  It provides two equivalent libraries: one for R<sup>6</sup>RS and
   one for R<sup>7</sup>RS. Each library depends only on standard
   language features. The R<sup>6</sup>RS library uses number
   procedures specialized for fixnums. A test suite as well as

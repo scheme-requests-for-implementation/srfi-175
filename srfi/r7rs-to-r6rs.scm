@@ -36,20 +36,21 @@
       (display "#!r6rs\n;; Automatically generated\n" out)
       (for-each (lambda (form) (pretty-print out form)) forms))))
 
+(define (write-r6rs-library filename libname exports body)
+  (write-r6rs-file
+   filename `(library ,libname (export ,@exports) (import (rnrs)) ,@body)))
+
 (define (translate-source-file r7rs-filename r6rs-filename)
   (apply write-r6rs-file r6rs-filename
-         (cons '(import (rnrs) (ascii))
+         (cons '(import (rnrs) (srfi :175))
                (r7rs->r6rs r7rs-filename))))
 
 (define (main)
-  (let* ((lib (call-with-input-file "ascii.sld" read))
-         (libname (cadr lib))
-         (exports (assoc 'export (cddr lib))))
-    (write-r6rs-file "ascii.sls"
-                     `(library ,libname
-                        ,exports
-                        (import (rnrs))
-                        ,@(r7rs->r6rs "ascii.scm")))
+  (let* ((lib (call-with-input-file "175.sld" read))
+         (exports (cdr (assoc 'export (cddr lib))))
+         (body (r7rs->r6rs "175.scm")))
+    (write-r6rs-library "175.sls" '(srfi :175) exports body)
+    (write-r6rs-library "srfi-175.sls" '(srfi srfi-175) exports body) ; Guile
     (translate-source-file "examples.scm" "examples.sps")
     (translate-source-file "tests.scm" "tests.sps")))
 

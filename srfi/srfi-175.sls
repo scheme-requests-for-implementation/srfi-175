@@ -1,6 +1,6 @@
 #!r6rs
 ;; Automatically generated
-(library (ascii)
+(library (srfi srfi-175)
          (export ascii-char?
                  ascii-control?
                  ascii-display?
@@ -26,14 +26,14 @@
                  ascii-punctuation)
          (import (rnrs))
          (define (ensure-int x) (if (char? x) (char->integer x) x))
-         (define (ascii-base-offset-limit x base offset limit)
+         (define (base-offset-limit x base offset limit)
            (let ((cc (ensure-int x)))
              (and (fx>=? cc base)
                   (fx<? cc (fx+ base limit))
                   (fx+ offset (fx- cc base)))))
          (define (ascii-char? x) (and (char? x) (fx<? (char->integer x) 128)))
          (define (ascii-control? x)
-           (let ((cc (ensure-int x))) (or (fx<? cc 32) (fx=? cc 127))))
+           (let ((cc (ensure-int x))) (or (fx<=? 0 cc 31) (fx=? cc 127))))
          (define (ascii-display? x)
            (let ((cc (ensure-int x))) (fx<=? 32 cc 126)))
          (define (ascii-whitespace? x)
@@ -59,12 +59,13 @@
          (define (ascii-numeric? x radix)
            (not (not (ascii-digit-value x radix))))
          (define (ascii-digit-value x limit)
-           (ascii-base-offset-limit x 48 0 (min limit 10)))
+           (base-offset-limit x 48 0 (min limit 10)))
          (define (ascii-upper-case-value x offset limit)
-           (ascii-base-offset-limit x 65 offset (min limit 26)))
+           (base-offset-limit x 65 offset (min limit 26)))
          (define (ascii-lower-case-value x offset limit)
-           (ascii-base-offset-limit x 97 offset (min limit 26)))
-         (define (ascii-nth-digit n) (integer->char (fx+ 48 (fxmod n 10))))
+           (base-offset-limit x 97 offset (min limit 26)))
+         (define (ascii-nth-digit n)
+           (and (fx<=? 0 n 9) (integer->char (fx+ 48 n))))
          (define (ascii-nth-upper-case n)
            (integer->char (fx+ 65 (fxmod n 26))))
          (define (ascii-nth-lower-case n)
