@@ -1,4 +1,4 @@
-(import (scheme base) (scheme file) (scheme read) (scheme write) (ascii))
+(import (scheme base) (scheme file) (scheme read) (scheme write) (srfi 175))
 
 (define (hex-digit char)
   (or (ascii-digit-value char 10)

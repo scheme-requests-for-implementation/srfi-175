@@ -2,5 +2,7 @@
 *.meta
 *.o
 *.so
+/%3a*
+/:*
 /examples
 /tests

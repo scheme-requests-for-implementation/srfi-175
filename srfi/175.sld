@@ -1,4 +1,4 @@
-(define-library (ascii)
+(define-library (srfi 175)
   (import (scheme base))
   (export ascii-char?
           ascii-control?
@@ -25,4 +25,4 @@
           ascii-lower-case
           ascii-upper-case
           ascii-punctuation)
-  (include "ascii.scm"))
+  (include "175.scm"))

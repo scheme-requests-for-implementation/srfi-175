@@ -3,5 +3,5 @@ set -eu
 cd "$(dirname "$0")"
 echo "Entering directory '$PWD'"
 set -x
-cyclone ascii.sld
+cyclone 175.sld
 cyclone "$1.scm"

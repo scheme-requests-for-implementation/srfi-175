@@ -1,6 +1,6 @@
 #!r6rs
 ;; Automatically generated
-(import (rnrs) (ascii))
+(import (rnrs) (srfi :175))
 (define-syntax want
   (syntax-rules ()
     ((_ right-answer (proc args ...))

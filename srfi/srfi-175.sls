@@ -1,6 +1,6 @@
 #!r6rs
 ;; Automatically generated
-(library (ascii)
+(library (srfi srfi-175)
          (export ascii-char?
                  ascii-control?
                  ascii-display?
