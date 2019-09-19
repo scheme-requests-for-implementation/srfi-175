@@ -141,12 +141,12 @@
           <p><strong>digit-value</strong></p>
         </td>
         <td>
-          <p>R<sup>7</sup>RS*</p>
+          <p>R<sup>7</sup>RS<sup>*</sup></p>
         </td>
       </tr>
     </tbody>
   </table>
-  <p>Note that the <strong>ascii-digit-value</strong> procedure
+  <p><sup>*</sup>Note that the <strong>ascii-digit-value</strong> procedure
   takes a <em>limit</em> argument that the standard
   <strong>digit-value</strong> procedure does not take.</p>
   <p>The standard Scheme procedures listed above require their
@@ -179,7 +179,7 @@
   perfectly logical but not quite.</p>
   <h3>ASCII character table</h3>
   <pre>
-  #x00 NUL  #x10 DLE  #x20    #x30 0  #x40 @  #x50 P  #x60 `  #x70 p
+#x00 NUL  #x10 DLE  #x20    #x30 0  #x40 @  #x50 P  #x60 `  #x70 p
 #x01 SOH  #x11 DC1  #x21 !  #x31 1  #x41 A  #x51 Q  #x61 a  #x71 q
 #x02 STX  #x12 DC2  #x22 "  #x32 2  #x42 B  #x52 R  #x62 b  #x72 r
 #x03 ETX  #x13 DC3  #x23 #  #x33 3  #x43 C  #x53 S  #x63 c  #x73 s
@@ -469,7 +469,7 @@
   simplicity, the following examples do not take
   number-to-character conversion into account.</p>
   <pre>
-  <code>(define (my-upcase char)   (or (ascii-lower-case-value char #x41 26) char))
+<code>(define (my-upcase char)   (or (ascii-lower-case-value char #x41 26) char))
 (define (my-downcase char) (or (ascii-upper-case-value char #x61 26) char))</code></pre>
   <h3>Number parsing</h3>
   <p>Since there are lots of slightly different number syntaxes,
@@ -477,7 +477,7 @@
   and strings. Instead, the rotation procedures let you easily roll
   your own. Here is one way to do it:</p>
   <pre>
-  <code>(define (parse-binary-digit  char) (ascii-digit-value char 2))
+<code>(define (parse-binary-digit  char) (ascii-digit-value char 2))
 (define (parse-octal-digit   char) (ascii-digit-value char 8))
 (define (parse-decimal-digit char) (ascii-digit-value char 10))
 
