@@ -79,6 +79,14 @@
 (want #f (ascii-char? #x80))
 (want #f (ascii-char? (integer->char #x80)))
 
+(want #f (ascii-control? -1))
+(want #t (ascii-control? #x00))
+(want #t (ascii-control? #x1f))
+(want #f (ascii-control? #x20))
+(want #f (ascii-control? #x7e))
+(want #t (ascii-control? #x7f))
+(want #f (ascii-control? #x80))
+
 (want 0 (ascii-digit-value #\0 10))
 (want 0 (ascii-digit-value #\0 1))
 (want #f (ascii-digit-value #\0 0))
