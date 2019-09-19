@@ -1,0 +1,6 @@
+*.c
+*.meta
+*.o
+*.so
+/examples
+/tests
