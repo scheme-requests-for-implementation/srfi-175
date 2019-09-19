@@ -94,8 +94,16 @@
 (want #\0 (ascii-nth-digit 0))
 (want #\9 (ascii-nth-digit 9))
 (want #f (ascii-nth-digit 10))
+
+(want #\Z (ascii-nth-upper-case -1))
 (want #\A (ascii-nth-upper-case 0))
+(want #\Z (ascii-nth-upper-case 25))
+(want #\A (ascii-nth-upper-case 26))
+
+(want #\z (ascii-nth-lower-case -1))
 (want #\a (ascii-nth-lower-case 0))
+(want #\z (ascii-nth-lower-case 25))
+(want #\a (ascii-nth-lower-case 26))
 
 (define (count-matching predicates value)
   (let loop ((ps predicates) (n 0))
