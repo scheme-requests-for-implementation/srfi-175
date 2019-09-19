@@ -13,7 +13,7 @@
 
 (define (ascii-control? x)
   (let ((cc (ensure-int x)))
-    (or (< cc #x20) (= cc #x7f))))
+    (or (<= 0 cc #x1f) (= cc #x7f))))
 
 (define (ascii-display? x)
   (let ((cc (ensure-int x)))

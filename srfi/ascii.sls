@@ -33,7 +33,7 @@
                   (fx+ offset (fx- cc base)))))
          (define (ascii-char? x) (and (char? x) (fx<? (char->integer x) 128)))
          (define (ascii-control? x)
-           (let ((cc (ensure-int x))) (or (fx<? cc 32) (fx=? cc 127))))
+           (let ((cc (ensure-int x))) (or (fx<=? 0 cc 31) (fx=? cc 127))))
          (define (ascii-display? x)
            (let ((cc (ensure-int x))) (fx<=? 32 cc 126)))
          (define (ascii-whitespace? x)
