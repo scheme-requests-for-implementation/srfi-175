@@ -8,8 +8,25 @@
 
 ;;
 
+(define (ascii-byte? x)
+  (and (integer? x) (exact? x) (<= 0 x #x7f)))
+
 (define (ascii-char? x)
   (and (char? x) (< (char->integer x) #x80)))
+
+(define (ascii-bytevector? x)
+  (and (bytevector? x)
+       (let check ((i (- (bytevector-length x) 1)))
+         (or (< i 0) (and (< (bytevector-u8-ref x i) #x80)
+                          (check (- i 1)))))))
+
+(define (ascii-string? x)
+  (and (string? x)
+       (let ((in (open-input-string x)))
+         (let check ()
+           (let ((char (read-char in)))
+             (or (eof-object? char)
+                 (and (< (char->integer char) #x80) (check))))))))
 
 (define (ascii-control? x)
   (let ((cc (ensure-int x)))

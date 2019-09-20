@@ -12,6 +12,31 @@
        (display '(proc args ...))
        (newline)))))
 
+(want #f (ascii-byte? -1))
+(want #t (ascii-byte? 0))
+(want #t (ascii-byte? #x7f))
+(want #f (ascii-byte? #x80))
+
+(want #t (ascii-char? (integer->char 0)))
+(want #t (ascii-char? (integer->char #x7f)))
+(want #f (ascii-char? (integer->char #x80)))
+
+(want #t (ascii-string? ""))
+(want #t (ascii-string? "a"))
+(want #t (ascii-string? "a b c"))
+(want #f (ascii-string? "å b o"))
+(want #t (ascii-string? (make-string 1 (integer->char #x7f))))
+(want #f (ascii-string? (make-string 1 (integer->char #x80))))
+
+(want #t (ascii-bytevector? (string->utf8 "")))
+(want #t (ascii-bytevector? (string->utf8 "a")))
+(want #t (ascii-bytevector? (string->utf8 "a b c")))
+(want #f (ascii-bytevector? (string->utf8 "å b o")))
+(want #t (ascii-bytevector?
+          (string->utf8 (make-string 1 (integer->char #x7f)))))
+(want #f (ascii-bytevector?
+          (string->utf8 (make-string 1 (integer->char #x80)))))
+
 (want #t (ascii-display? #\space))
 (want #f (ascii-display? #\tab))
 (want #f (ascii-display? #\newline))

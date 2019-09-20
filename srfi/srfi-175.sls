@@ -1,7 +1,10 @@
 #!r6rs
 ;; Automatically generated
 (library (srfi srfi-175)
-         (export ascii-char?
+         (export ascii-byte?
+                 ascii-bytevector?
+                 ascii-char?
+                 ascii-string?
                  ascii-control?
                  ascii-display?
                  ascii-whitespace?
@@ -32,7 +35,22 @@
              (and (fx>=? cc base)
                   (fx<? cc (fx+ base limit))
                   (fx+ offset (fx- cc base)))))
+         (define (ascii-byte? x)
+           (and (integer? x) (exact? x) (fx<=? 0 x 127)))
          (define (ascii-char? x) (and (char? x) (fx<? (char->integer x) 128)))
+         (define (ascii-bytevector? x)
+           (and (bytevector? x)
+                (let check ((i (fx- (bytevector-length x) 1)))
+                  (or (fx<? i 0)
+                      (and (fx<? (bytevector-u8-ref x i) 128)
+                           (check (fx- i 1)))))))
+         (define (ascii-string? x)
+           (and (string? x)
+                (let ((in (open-string-input-port x)))
+                  (let check ()
+                    (let ((char (read-char in)))
+                      (or (eof-object? char)
+                          (and (fx<? (char->integer char) 128) (check))))))))
          (define (ascii-control? x)
            (let ((cc (ensure-int x))) (or (fx<=? 0 cc 31) (fx=? cc 127))))
          (define (ascii-display? x)

@@ -309,15 +309,34 @@
   digits.</p>
   <h2>Specification</h2>
   <h3>Predicates specific to ASCII</h3>
+  <p>(<strong>ascii-byte?</strong> <em>obj</em>)</p>
+  <p>Returns <code>#t</code> if <em>obj</em> is an exact integer in
+  the inclusive range <code>#x00..#x7f</code>. Else returns
+  <code>#f</code>.</p>
+  <p>(<strong>ascii-bytevector?</strong> <em>obj</em>)</p>
+  <p>Returns <code>#t</code> if <em>obj</em> is a bytevector and
+  contains no byte value outside the inclusive range
+  <code>#x00..#x7f</code>. Else returns <code>#f</code>.</p>
+  <p>A zero-length bytevector is considered an ASCII
+  bytevector.</p>
   <p>(<strong>ascii-char?</strong> <em>obj</em>)</p>
   <p>Returns <code>#t</code> if <em>obj</em> is a character object
-  representing an ASCII character. Else returns
+  in the ASCII inclusive range <code>#x00..#x7f</code>. Else
+  returns <code>#f</code>.</p>
+  <p>In a Scheme implementation whose native character set is
+  Unicode or another extended ASCII character set, the codepoints
+  <code>#x00..#x7f</code> represent ASCII. An implementation whose
+  native character set is something else is permitted to assign
+  ASCII to some other contiguous range of character values so that
+  <code>(ascii-char? (integer-&gt;char 0))</code> is false, and
+  this SRFI has been designed to work correctly even in that
+  case.</p>
+  <p>(<strong>ascii-string?</strong> <em>obj</em>)</p>
+  <p>Returns <code>#t</code> if <em>obj</em> is a string and
+  contains no character with a codepoint outside the ASCII
+  inclusive range <code>#x00..#x7f</code>. Else returns
   <code>#f</code>.</p>
-  <p>In a Scheme implementation where character objects are
-  Unicode, character values less than <code>#x80</code> represent
-  ASCII.</p>
-  <p>This is the only predicate in this SRFI that recognizes only
-  character objects, not equivalent fixnums.</p>
+  <p>A zero-length string is considered an ASCII string.</p>
   <p>(<strong>ascii-control?</strong> <em>char</em>)</p>
   <p>Returns <code>#t</code> if <em>char</em> represents an ASCII
   character in the <em>control</em> class. Else returns
