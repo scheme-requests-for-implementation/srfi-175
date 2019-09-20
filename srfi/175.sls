@@ -20,6 +20,8 @@
                  ascii-nth-lower-case
                  ascii-upcase
                  ascii-downcase
+                 ascii-control->display
+                 ascii-display->control
                  ascii-digits
                  ascii-lower-case
                  ascii-upper-case
@@ -78,6 +80,16 @@
            (if (char? x)
                (integer->char (ascii-downcase (char->integer x)))
                (or (ascii-upper-case-value x 97 26) x)))
+         (define (ascii-control->display x)
+           (if (char? x)
+               (let ((x (ascii-control->display (char->integer x))))
+                 (and x (integer->char x)))
+               (or (and (fx<=? 0 x 31) (fx+ x 64)) (and (fx=? x 127) 63))))
+         (define (ascii-display->control x)
+           (if (char? x)
+               (let ((x (ascii-display->control (char->integer x))))
+                 (and x (integer->char x)))
+               (or (and (fx<=? 64 x 95) (fx- x 64)) (and (fx=? x 63) 127))))
          (define ascii-digits "0123456789")
          (define ascii-lower-case "abcdefghijklmnopqrstuvwxyz")
          (define ascii-upper-case "ABCDEFGHIJKLMNOPQRSTUVWXYZ")

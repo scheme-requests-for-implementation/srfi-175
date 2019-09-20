@@ -66,7 +66,13 @@
                              (want #f (ascii-whitespace? cc))
                              (want #f (ascii-space-or-tab? cc)))
      ((ascii-control? cc) (want #f (ascii-display? cc))
-                          (want #f (ascii-punctuation? cc))))
+                          (want #f (ascii-punctuation? cc))
+                          (want cc
+                                (ascii-display->control
+                                 (ascii-control->display cc)))
+                          (want (integer->char cc)
+                                (ascii-display->control
+                                 (ascii-control->display (integer->char cc))))))
     (loop (fx+ cc 1))))
 (want #f (ascii-char? -1))
 (want #f (ascii-char? 128))

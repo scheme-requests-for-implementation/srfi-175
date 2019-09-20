@@ -20,6 +20,8 @@
           ascii-nth-lower-case
           ascii-upcase
           ascii-downcase
+          ascii-control->display
+          ascii-display->control
 
           ascii-digits
           ascii-lower-case

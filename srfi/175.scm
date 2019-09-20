@@ -88,6 +88,20 @@
       (integer->char (ascii-downcase (char->integer x)))
       (or (ascii-upper-case-value x #x61 26) x)))
 
+(define (ascii-control->display x)
+  (if (char? x)
+      (let ((x (ascii-control->display (char->integer x))))
+        (and x (integer->char x)))
+      (or (and (<= 0 x #x1f) (+ x #x40))
+          (and (= x #x7f) #x3f))))
+
+(define (ascii-display->control x)
+  (if (char? x)
+      (let ((x (ascii-display->control (char->integer x))))
+        (and x (integer->char x)))
+      (or (and (<= #x40 x #x5f) (- x #x40))
+          (and (= x #x3f) #x7f))))
+
 ;;
 
 (define ascii-digits "0123456789")

@@ -416,6 +416,30 @@
   unchanged.</p>
   <p><em>char</em> can be a fixnum or a character object; the same
   type of object is returned.</p>
+  <h3>Control character display procedures</h3>
+  <p>Every ASCII control character has a corresponding display
+  character. The control characters <code>#x00..#x1f</code> are
+  displayed as <code>@ A B C ... X Y Z [ \ ] ^ _</code>. The
+  control character <code>#x7f</code> is displayed as
+  <code>?</code>. For example, when you press
+  Control-<code>A</code> in a Unix terminal, the program running in
+  the terminal receives the ASCII character <code>#x01</code>.
+  Control-<code>A</code> is sometimes written <code>^A</code>.
+  Likewise, Control-<code>@</code> can be written as
+  <code>^@</code> and Control-<code>^</code> as <code>^^</code>,
+  etc.</p>
+  <p>(<strong>ascii-control-&gt;display</strong> <em>char</em>)</p>
+  <p>If <em>char</em> represents an ASCII character in the
+  <em>control</em> class, returns the corresponding display
+  character as above. Else returns <code>#f</code>.</p>
+  <p><em>char</em> can be a fixnum or a character object; the same
+  type of object is returned.</p>
+  <p>(<strong>ascii-display-&gt;control</strong> <em>char</em>)</p>
+  <p>If <em>char</em> represents one of the ASCII display
+  characters given above, returns the corresponding control
+  character. Else returns <code>#f</code>.</p>
+  <p><em>char</em> can be a fixnum or a character object; the same
+  type of object is returned.</p>
   <h3>Transformation procedures</h3>
   <p>These procedures serve as versatile building blocks for
   various letter and number transformations.</p>
