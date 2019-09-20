@@ -129,10 +129,3 @@
     (else (and (integer? char)
                (let ((br (ascii-mirror-bracket (integer->char char))))
                  (and br (char->integer br)))))))
-
-;;
-
-(define ascii-digits "0123456789")
-(define ascii-lower-case "abcdefghijklmnopqrstuvwxyz")
-(define ascii-upper-case "ABCDEFGHIJKLMNOPQRSTUVWXYZ")
-(define ascii-punctuation "!\"#$%&'()*+,-./:;<=>?@[\\]^_`{|}~")

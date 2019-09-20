@@ -24,11 +24,7 @@
                  ascii-display->control
                  ascii-open-bracket
                  ascii-close-bracket
-                 ascii-mirror-bracket
-                 ascii-digits
-                 ascii-lower-case
-                 ascii-upper-case
-                 ascii-punctuation)
+                 ascii-mirror-bracket)
          (import (rnrs))
          (define (ensure-int x) (if (char? x) (char->integer x) x))
          (define (base-offset-limit x base offset limit)
@@ -120,8 +116,4 @@
              (else
               (and (integer? char)
                    (let ((br (ascii-mirror-bracket (integer->char char))))
-                     (and br (char->integer br)))))))
-         (define ascii-digits "0123456789")
-         (define ascii-lower-case "abcdefghijklmnopqrstuvwxyz")
-         (define ascii-upper-case "ABCDEFGHIJKLMNOPQRSTUVWXYZ")
-         (define ascii-punctuation "!\"#$%&'()*+,-./:;<=>?@[\\]^_`{|}~"))
+                     (and br (char->integer br))))))))

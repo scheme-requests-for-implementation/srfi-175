@@ -24,10 +24,5 @@
           ascii-display->control
           ascii-open-bracket
           ascii-close-bracket
-          ascii-mirror-bracket
-
-          ascii-digits
-          ascii-lower-case
-          ascii-upper-case
-          ascii-punctuation)
+          ascii-mirror-bracket)
   (include "175.scm"))
