@@ -53,16 +53,32 @@
   and their behavior is much easier to understand than their
   Unicode equivalents. They have shorter code paths with fewer and
   simpler failure modes, and need no lookup tables.</p>
-  <h3>Characters as fixnums</h3>
+  <h3>Characters as integers</h3>
   <p>Scheme has a standard character data type which is very useful
   for disambiguating between characters and integers. However, code
   dealing with low-level binary formats typically uses byte ports
-  and bytevectors whose elements are small integers (fixnums). It
-  is convenient to treat those fixnums as if they were characters
-  (which they often represent, as most binary formats also contain
-  strings of text). For that reason, most of the procedures in this
-  SRFI taking character objects also accept fixnums in their
-  place.</p>
+  and bytevectors whose elements are small, exact nonnegative
+  integers. It is convenient to treat those integers as if they
+  were characters (which they often represent, as most binary
+  formats also contain strings of text).</p>
+  <p>For that reason, the procedures in this SRFI taking character
+  objects also accept integers in their place. So wherever a
+  procedure has a <em>char</em> argument, the caller may pass
+  either a character object or an integer. This includes the
+  R<sup>n</sup>RS-equivalent ASCII procedures, even though the
+  corresponding R<sup>n</sup>RS procedures do not accept
+  integers.</p>
+  <p>The sole exception to the rule is the
+  <strong>ascii-char?</strong> procedure, which only recognizes
+  character objects. <strong>ascii-byte?</strong> is a twin
+  procedure that recognizes only integers.</p>
+  <p>R<sup>6</sup>RS has separate arithmetic and comparison
+  primitives for fixnums (<code>fx+ fx&lt;?</code> and the like) in
+  addition to the usual primitives that accept all integers
+  (<code>+ &lt;</code> and the like). To allow an efficient
+  R<sup>6</sup>RS implementation of this SRFI, implementations are
+  free to raise an exception if a bignum is passed in, or when an
+  intermediate computation overflows the fixnum range.</p>
   <h3>Procedure equivalence</h3>
   <p>The following table lists all procedures defined in this SRFI
   that have direct equivalents in the Scheme R<sup>n</sup>RS
