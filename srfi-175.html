@@ -504,7 +504,7 @@
   <p>Returns a character object representing the <em>n</em>'th
   decimal digit in ASCII. <em>n</em> counts from zero so that 0
   returns <code>0</code> and 9 returns <code>9</code>.</p>
-  <p><em>n</em> must be a fixnum in the range 0..9. If not,
+  <p>If <em>n</em> it not a fixnum in the range 0..9,
   <code>#f</code> is returned.</p>
   <p>(<strong>ascii-nth-upper-case</strong> <em>n</em>)</p>
   <p>Returns a character object representing the <em>n</em>'th
@@ -533,8 +533,9 @@
   acceptable digit, <code>#f</code> is returned.</p>
   <p>To accept the entire range, pass a <em>limit</em> of 10. It is
   not an error to pass a limit less than 1 or greater than 10.
-  <em>limit</em> must be a fixnum, and can be negative.
-  <em>char</em> can be a fixnum or character object.</p>
+  <em>limit</em> can be negative. It is an error if <em>limit</em>
+  is not a fixnum. <em>char</em> can be a fixnum or character
+  object.</p>
   <p>(<strong>ascii-upper-case-value</strong> <em>char</em>
   <em>offset</em> <em>limit</em>)</p>
   <p>If <em>char</em> represents an ASCII upper-case letter, its
@@ -547,8 +548,9 @@
   returned.</p>
   <p>To accept the entire range, pass a <em>limit</em> of 26. It is
   not an error to pass a limit less than 1 or greater than 26.
-  <em>offset</em> and <em>limit</em> must be fixnums, and can be
-  negative. <em>char</em> can be a fixnum or character object.</p>
+  <em>offset</em> and <em>limit</em> can be negative. It is an
+  error if they are not fixnums. <em>char</em> can be a fixnum or
+  character object.</p>
   <p>(<strong>ascii-lower-case-value</strong> <em>char</em>
   <em>offset</em> <em>limit</em>)</p>
   <p>If <em>char</em> represents an ASCII lower-case letter, its
@@ -561,8 +563,9 @@
   returned.</p>
   <p>To accept the entire range, pass a <em>limit</em> of 26. It is
   not an error to pass a limit less than 1 or greater than 26.
-  <em>offset</em> and <em>limit</em> must be fixnums, and can be
-  negative. <em>char</em> can be a fixnum or character object.</p>
+  <em>offset</em> and <em>limit</em> can be negative. It is an
+  error if they are not fixnums. <em>char</em> can be a fixnum or
+  character object.</p>
   <h2>Examples</h2>
   <h3>Case conversion</h3>
   <p>The case conversion procedures in this SRFI can be implemented
