@@ -72,7 +72,25 @@
                                  (ascii-control->display cc)))
                           (want (integer->char cc)
                                 (ascii-display->control
-                                 (ascii-control->display (integer->char cc))))))
+                                 (ascii-control->display (integer->char cc)))))
+     ((ascii-open-bracket cc) (want #f (ascii-close-bracket cc))
+                              (want cc
+                                    (ascii-mirror-bracket
+                                     (ascii-mirror-bracket cc)))
+                              (want cc
+                                    (ascii-open-bracket
+                                     (ascii-mirror-bracket
+                                      (ascii-close-bracket
+                                       (ascii-mirror-bracket cc))))))
+     ((ascii-close-bracket cc) (want #f (ascii-open-bracket cc))
+                               (want cc
+                                     (ascii-mirror-bracket
+                                      (ascii-mirror-bracket cc)))
+                               (want cc
+                                     (ascii-close-bracket
+                                      (ascii-mirror-bracket
+                                       (ascii-open-bracket
+                                        (ascii-mirror-bracket cc)))))))
     (loop (fx+ cc 1))))
 (want #f (ascii-char? -1))
 (want #f (ascii-char? 128))

@@ -416,6 +416,57 @@
   unchanged.</p>
   <p><em>char</em> can be a fixnum or a character object; the same
   type of object is returned.</p>
+  <h3>Bracket matching procedures</h3>
+  <p>ASCII includes four pairs of open and close brackets:</p>
+  <table>
+    <tr>
+      <th>Open</th>
+      <th>Close</th>
+      <th>Known as</th>
+    </tr>
+    <tr>
+      <td><code>(</code></td>
+      <td><code>)</code></td>
+      <td>Parentheses</td>
+    </tr>
+    <tr>
+      <td><code>[</code></td>
+      <td><code>]</code></td>
+      <td>Square brackets</td>
+    </tr>
+    <tr>
+      <td><code>{</code></td>
+      <td><code>}</code></td>
+      <td>Curly braces</td>
+    </tr>
+    <tr>
+      <td><code>&lt;</code></td>
+      <td><code>&gt;</code></td>
+      <td>Angle brackets</td>
+    </tr>
+  </table>
+  <p>(<strong>ascii-open-bracket</strong> <em>char</em>)</p>
+  <p>If <em>char</em> represents one of the four ASCII open
+  brackets, returns it. Else returns <code>#f</code>.</p>
+  <p><em>char</em> can be a fixnum or a character object; the same
+  type of object is returned.</p>
+  <p>(<strong>ascii-close-bracket</strong> <em>char</em>)</p>
+  <p>If <em>char</em> represents one of the four ASCII close
+  brackets, returns it. Else returns <code>#f</code>.</p>
+  <p><em>char</em> can be a fixnum or a character object; the same
+  type of object is returned.</p>
+  <p>(<strong>ascii-mirror-bracket</strong> <em>char</em>)</p>
+  <ul>
+    <li>If <em>char</em> represents one of the four ASCII
+    <em>open</em> brackets, returns the corresponding
+    <em>close</em> bracket.</li>
+    <li>If <em>char</em> represents one of the four ASCII
+    <em>close</em> brackets, returns the corresponding
+    <em>open</em> bracket.</li>
+    <li>Else returns <code>#f</code>.</li>
+  </ul>
+  <p><em>char</em> can be a fixnum or a character object; the same
+  type of object is returned.</p>
   <h3>Control character display procedures</h3>
   <p>Every ASCII control character has a corresponding display
   character. The control characters <code>#x00..#x1f</code> are

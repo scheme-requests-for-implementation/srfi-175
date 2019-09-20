@@ -22,6 +22,9 @@
           ascii-downcase
           ascii-control->display
           ascii-display->control
+          ascii-open-bracket
+          ascii-close-bracket
+          ascii-mirror-bracket
 
           ascii-digits
           ascii-lower-case

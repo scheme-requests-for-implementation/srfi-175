@@ -22,6 +22,9 @@
                  ascii-downcase
                  ascii-control->display
                  ascii-display->control
+                 ascii-open-bracket
+                 ascii-close-bracket
+                 ascii-mirror-bracket
                  ascii-digits
                  ascii-lower-case
                  ascii-upper-case
@@ -90,6 +93,34 @@
                (let ((x (ascii-display->control (char->integer x))))
                  (and x (integer->char x)))
                (or (and (fx<=? 64 x 95) (fx- x 64)) (and (fx=? x 63) 127))))
+         (define (ascii-open-bracket char)
+           (case char
+             ((#\( #\[ #\{ #\<) char)
+             (else
+              (and (integer? char)
+                   (let ((br (ascii-open-bracket (integer->char char))))
+                     (and br (char->integer br)))))))
+         (define (ascii-close-bracket char)
+           (case char
+             ((#\) #\] #\} #\>) char)
+             (else
+              (and (integer? char)
+                   (let ((br (ascii-close-bracket (integer->char char))))
+                     (and br (char->integer br)))))))
+         (define (ascii-mirror-bracket char)
+           (case char
+             ((#\() #\))
+             ((#\)) #\()
+             ((#\[) #\])
+             ((#\]) #\[)
+             ((#\{) #\})
+             ((#\}) #\{)
+             ((#\<) #\>)
+             ((#\>) #\<)
+             (else
+              (and (integer? char)
+                   (let ((br (ascii-mirror-bracket (integer->char char))))
+                     (and br (char->integer br)))))))
          (define ascii-digits "0123456789")
          (define ascii-lower-case "abcdefghijklmnopqrstuvwxyz")
          (define ascii-upper-case "ABCDEFGHIJKLMNOPQRSTUVWXYZ")

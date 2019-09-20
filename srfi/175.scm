@@ -102,6 +102,34 @@
       (or (and (<= #x40 x #x5f) (- x #x40))
           (and (= x #x3f) #x7f))))
 
+(define (ascii-open-bracket char)
+  (case char
+    ((#\( #\[ #\{ #\<) char)
+    (else (and (integer? char)
+               (let ((br (ascii-open-bracket (integer->char char))))
+                 (and br (char->integer br)))))))
+
+(define (ascii-close-bracket char)
+  (case char
+    ((#\) #\] #\} #\>) char)
+    (else (and (integer? char)
+               (let ((br (ascii-close-bracket (integer->char char))))
+                 (and br (char->integer br)))))))
+
+(define (ascii-mirror-bracket char)
+  (case char
+    ((#\() #\))
+    ((#\)) #\()
+    ((#\[) #\])
+    ((#\]) #\[)
+    ((#\{) #\})
+    ((#\}) #\{)
+    ((#\<) #\>)
+    ((#\>) #\<)
+    (else (and (integer? char)
+               (let ((br (ascii-mirror-bracket (integer->char char))))
+                 (and br (char->integer br)))))))
+
 ;;
 
 (define ascii-digits "0123456789")
