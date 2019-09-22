@@ -12,10 +12,10 @@
        (display '(proc args ...))
        (newline)))))
 
-(want #f (ascii-byte? -1))
-(want #t (ascii-byte? 0))
-(want #t (ascii-byte? #x7f))
-(want #f (ascii-byte? #x80))
+(want #f (ascii-codepoint? -1))
+(want #t (ascii-codepoint? 0))
+(want #t (ascii-codepoint? #x7f))
+(want #f (ascii-codepoint? #x80))
 
 (want #t (ascii-char? (integer->char 0)))
 (want #t (ascii-char? (integer->char #x7f)))

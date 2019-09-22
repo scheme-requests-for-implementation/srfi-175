@@ -16,7 +16,7 @@
 
 ;;
 
-(define (ascii-byte? x)
+(define (ascii-codepoint? x)
   (and (integer? x) (exact? x) (<= 0 x #x7f)))
 
 (define (ascii-char? x)

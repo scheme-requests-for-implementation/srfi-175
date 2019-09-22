@@ -1,7 +1,7 @@
 #!r6rs
 ;; Automatically generated
 (library (srfi :175)
-         (export ascii-byte?
+         (export ascii-codepoint?
                  ascii-bytevector?
                  ascii-char?
                  ascii-string?
@@ -41,7 +41,7 @@
          (define (int->char->int map-char int)
            (let ((char (map-char (integer->char int))))
              (and char (char->integer char))))
-         (define (ascii-byte? x)
+         (define (ascii-codepoint? x)
            (and (integer? x) (exact? x) (fx<=? 0 x 127)))
          (define (ascii-char? x) (and (char? x) (fx<? (char->integer x) 128)))
          (define (ascii-bytevector? x)

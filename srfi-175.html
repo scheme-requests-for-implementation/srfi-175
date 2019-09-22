@@ -324,8 +324,8 @@
   not do rotations, since once again those are less useful on
   digits.</p>
   <h2>Specification</h2>
-  <h3>Predicates specific to ASCII</h3>
-  <p>(<strong>ascii-byte?</strong> <em>obj</em>)</p>
+  <h3>Predicates to test for ASCII vs non-ASCII objects</h3>
+  <p>(<strong>ascii-codepoint?</strong> <em>obj</em>)</p>
   <p>Returns <code>#t</code> if <em>obj</em> is an exact integer in
   the inclusive range <code>#x00..#x7f</code>. Else returns
   <code>#f</code>.</p>
@@ -353,6 +353,7 @@
   inclusive range <code>#x00..#x7f</code>. Else returns
   <code>#f</code>.</p>
   <p>A zero-length string is considered an ASCII string.</p>
+  <h3>Predicates to test for subsets of ASCII</h3>
   <p>(<strong>ascii-control?</strong> <em>char</em>)</p>
   <p>Returns <code>#t</code> if <em>char</em> represents an ASCII
   character in the <em>control</em> class. Else returns

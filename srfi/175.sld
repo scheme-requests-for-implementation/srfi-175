@@ -1,6 +1,6 @@
 (define-library (srfi 175)
   (import (scheme base))
-  (export ascii-byte?
+  (export ascii-codepoint?
           ascii-bytevector?
 
           ascii-char?
