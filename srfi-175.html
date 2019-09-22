@@ -57,28 +57,12 @@
   <p>Scheme has a standard character data type which is very useful
   for disambiguating between characters and integers. However, code
   dealing with low-level binary formats typically uses byte ports
-  and bytevectors whose elements are small, exact nonnegative
-  integers. It is convenient to treat those integers as if they
-  were characters (which they often represent, as most binary
-  formats also contain strings of text).</p>
-  <p>For that reason, the procedures in this SRFI taking character
-  objects also accept integers in their place. So wherever a
-  procedure has a <em>char</em> argument, the caller may pass
-  either a character object or an integer. This includes the
-  R<sup>n</sup>RS-equivalent ASCII procedures, even though the
-  corresponding R<sup>n</sup>RS procedures do not accept
-  integers.</p>
-  <p>The sole exception to the rule is the
-  <strong>ascii-char?</strong> procedure, which only recognizes
-  character objects. <strong>ascii-byte?</strong> is a twin
-  procedure that recognizes only integers.</p>
-  <p>R<sup>6</sup>RS has separate arithmetic and comparison
-  primitives for fixnums (<code>fx+ fx&lt;?</code> and the like) in
-  addition to the usual primitives that accept all integers
-  (<code>+ &lt;</code> and the like). To allow an efficient
-  R<sup>6</sup>RS implementation of this SRFI, implementations are
-  free to raise an exception if a bignum is passed in, or when an
-  intermediate computation overflows the fixnum range.</p>
+  and bytevectors whose elements small, exact nonnegative integers.
+  It is convenient to treat those integers as if they were
+  characters (which they often represent, as most binary formats
+  also contain strings of text). For this reason, the procedures in
+  this SRFI taking character objects also accept integers in their
+  place.</p>
   <h3>Procedure equivalence</h3>
   <p>The following table lists all procedures defined in this SRFI
   that have direct equivalents in the Scheme R<sup>n</sup>RS
@@ -324,6 +308,34 @@
   not do rotations, since once again those are less useful on
   digits.</p>
   <h2>Specification</h2>
+  <h3>Numerical limits</h3>
+  <p>Let the <em>char-fix</em> range be an implementation-defined
+  range of exact integer values such that:</p>
+  <ul>
+    <li>The minimum char-fix value is at least as small as the
+    minimum fixnum value.</li>
+    <li>The maximum char-fix value is at least as large as the
+    maximum fixnum value or the maximum possible return value of
+    <strong>char-&gt;integer</strong> (whichever is larger).</li>
+  </ul>
+  <p>For every procedure in this SRFI:</p>
+  <ul>
+    <li>Any argument named <em>char</em> is either a character
+    object or an exact integer in the char-fix range.</li>
+    <li>Any argument named <em>offset</em> or <em>limit</em> or
+    <em>n</em> is an exact integer in the char-fix range.</li>
+    <li>If the procedure takes both <em>offset</em> and
+    <em>limit</em> arguments, then it is an error for the caller to
+    pass values such that <em>offset + limit - 1</em> lies outside
+    the char-fix range.</li>
+  </ul>
+  <p>Hence in a Scheme implementation where all character
+  codepoints fit in a fixnum, the char-fix range can be identical
+  to the fixnum range and this SRFI can be implemented using fast
+  fixnum math. In particular, R<sup>6</sup>RS supplies standard
+  fixnum procedures with the <code>fx</code> prefix. In a Scheme
+  implementation where some codepoints are bigger than a fixnum,
+  generic math has to be used.</p>
   <h3>Predicates to test for ASCII vs non-ASCII objects</h3>
   <p>(<strong>ascii-codepoint?</strong> <em>obj</em>)</p>
   <p>Returns <code>#t</code> if <em>obj</em> is an exact integer in
@@ -360,7 +372,6 @@
   <code>#f</code>.</p>
   <p>Note that carriage return, line feed and tab are control
   characters but space is not.</p>
-  <p><em>char</em> can be a fixnum or character object.</p>
   <p>(<strong>ascii-display?</strong> <em>char</em>)</p>
   <p>Returns <code>#t</code> if <em>char</em> represents an ASCII
   character that is <strong>not</strong> in the <em>control</em>
@@ -371,7 +382,6 @@
   <p>Note that we consider space to be a display character but not
   tab, carriage return or line feed. This convention is popular but
   not universal.</p>
-  <p><em>char</em> can be a fixnum or character object.</p>
   <p>(<strong>ascii-space-or-tab?</strong> <em>char</em>)</p>
   <p>Returns <code>#t</code> if <em>char</em> represents an ASCII
   character with the integer value <code>#x09</code> (tab) or
@@ -379,28 +389,23 @@
   <p>The point is that space and tab are very often useful to
   distinguish from other whitespace characters, notably
   newlines.</p>
-  <p><em>char</em> can be a fixnum or character object.</p>
   <p>(<strong>ascii-punctuation?</strong> <em>char</em>)</p>
   <p>Returns <code>#t</code> if <em>char</em> represents an ASCII
   character in the <em>punctuation</em> class. Else returns
   <code>#f</code>.</p>
-  <p><em>char</em> can be a fixnum or character object.</p>
   <p>(<strong>ascii-alphanumeric?</strong> <em>char</em>)</p>
   <p>Returns <code>#t</code> if <em>char</em> represents an ASCII
   character in the <em>upper-case</em> or <em>lower-case</em> or
   <em>digit</em> class. Else returns <code>#f</code>.</p>
-  <p><em>char</em> can be a fixnum or character object.</p>
   <h3>Predicates with standard Scheme equivalents</h3>
   <p>(<strong>ascii-alphabetic?</strong> <em>char</em>)</p>
   <p>Returns <code>#t</code> if <em>char</em> represents an ASCII
   character in the <em>upper-case</em> or <em>lower-case</em>
   class. Else returns <code>#f</code>.</p>
-  <p><em>char</em> can be a fixnum or character object.</p>
   <p>(<strong>ascii-numeric?</strong> <em>char</em>)</p>
   <p>Returns <code>#t</code> if <em>char</em> represents an ASCII
   character in the <em>digit</em> class. Else returns
   <code>#f</code>.</p>
-  <p><em>char</em> can be a fixnum or character object.</p>
   <p>(<strong>ascii-whitespace?</strong> <em>char</em>)</p>
   <p>Returns <code>#t</code> if <em>char</em> represents an ASCII
   character with the integer value <code>#x09</code> (tab) or
@@ -411,32 +416,29 @@
   <p>Notice how the other whitespace characters form a contiguous
   range of control characters, but space stands alone as a separate
   non-control character.</p>
-  <p><em>char</em> can be a fixnum or character object.</p>
   <p>(<strong>ascii-upper-case?</strong> <em>char</em>)</p>
   <p>Returns <code>#t</code> if <em>char</em> represents an ASCII
   character in the <em>upper-case</em> class. Else returns
   <code>#f</code>.</p>
-  <p><em>char</em> can be a fixnum or character object.</p>
   <p>(<strong>ascii-lower-case?</strong> <em>char</em>)</p>
   <p>Returns <code>#t</code> if <em>char</em> represents an ASCII
   character in the <em>lower-case</em> class. Else returns
   <code>#f</code>.</p>
-  <p><em>char</em> can be a fixnum or character object.</p>
   <h3>Case conversion procedures</h3>
   <p>(<strong>ascii-upcase</strong> <em>char</em>)</p>
   <p>If <em>char</em> represents an ASCII character in the
   <em>lower-case</em> class, returns the same letter from the
   <em>upper-case</em> class. Else returns <em>char</em>
   unchanged.</p>
-  <p><em>char</em> can be a fixnum or a character object; the same
-  type of object is returned.</p>
+  <p><em>char</em> can be a character object or an integer; the
+  same type of object is returned.</p>
   <p>(<strong>ascii-downcase</strong> <em>char</em>)</p>
   <p>If <em>char</em> represents an ASCII character in the
   <em>upper-case</em> class, returns the same letter from the
   <em>lower-case</em> class. Else returns <em>char</em>
   unchanged.</p>
-  <p><em>char</em> can be a fixnum or a character object; the same
-  type of object is returned.</p>
+  <p><em>char</em> can be a character object or an integer; the
+  same type of object is returned.</p>
   <h3>Bracket matching procedures</h3>
   <p>ASCII includes four pairs of open and close brackets:</p>
   <table>
@@ -470,26 +472,26 @@
   <p>If <em>char</em> represents one of the four ASCII open
   brackets, returns <em>char</em>. Else returns
   <code>#f</code>.</p>
-  <p><em>char</em> can be a fixnum or a character object; the same
-  type of object is returned.</p>
+  <p><em>char</em> can be a character object or an integer; the
+  same type of object is returned.</p>
   <p>(<strong>ascii-close-bracket</strong> <em>char</em>)</p>
   <p>If <em>char</em> represents one of the four ASCII close
   brackets, returns <em>char</em>. Else returns
   <code>#f</code>.</p>
-  <p><em>char</em> can be a fixnum or a character object; the same
-  type of object is returned.</p>
+  <p><em>char</em> can be a character object or an integer; the
+  same type of object is returned.</p>
   <p>(<strong>ascii-mirror-bracket</strong> <em>char</em>)</p>
   <ul>
     <li>If <em>char</em> represents one of the four ASCII
-    <em>open</em> brackets, returns the corresponding
-    <em>close</em> bracket.</li>
+    <em>open</em> brackets, returns the <em>close</em> bracket from
+    the same pair.</li>
     <li>If <em>char</em> represents one of the four ASCII
-    <em>close</em> brackets, returns the corresponding
-    <em>open</em> bracket.</li>
+    <em>close</em> brackets, returns the <em>open</em> bracket from
+    the same pair.</li>
     <li>Else returns <code>#f</code>.</li>
   </ul>
-  <p><em>char</em> can be a fixnum or a character object; the same
-  type of object is returned.</p>
+  <p><em>char</em> can be a character object or an integer; the
+  same type of object is returned.</p>
   <h3>Control character display procedures</h3>
   <p>Every ASCII control character has a corresponding display
   character. The control characters <code>#x00..#x1f</code> are
@@ -506,14 +508,14 @@
   <p>If <em>char</em> represents an ASCII character in the
   <em>control</em> class, returns the corresponding display
   character as above. Else returns <code>#f</code>.</p>
-  <p><em>char</em> can be a fixnum or a character object; the same
-  type of object is returned.</p>
+  <p><em>char</em> can be a character object or an integer; the
+  same type of object is returned.</p>
   <p>(<strong>ascii-display-&gt;control</strong> <em>char</em>)</p>
   <p>If <em>char</em> represents one of the ASCII display
   characters given above, returns the corresponding control
   character. Else returns <code>#f</code>.</p>
-  <p><em>char</em> can be a fixnum or a character object; the same
-  type of object is returned.</p>
+  <p><em>char</em> can be a character object or an integer; the
+  same type of object is returned.</p>
   <h3>Transformation procedures</h3>
   <p>These procedures serve as versatile building blocks for
   various letter and number transformations.</p>
@@ -521,7 +523,7 @@
   <p>Returns a character object representing the <em>n</em>'th
   decimal digit in ASCII. <em>n</em> counts from zero so that 0
   returns <code>0</code> and 9 returns <code>9</code>.</p>
-  <p>If <em>n</em> it not a fixnum in the range 0..9,
+  <p>If <em>n</em> is not an exact integer in the range 0..9,
   <code>#f</code> is returned.</p>
   <p>(<strong>ascii-nth-upper-case</strong> <em>n</em>)</p>
   <p>Returns a character object representing the <em>n</em>'th
@@ -546,43 +548,32 @@
   <p>If <em>char</em> represents an ASCII decimal digit, returns
   the numeric value 0..9 of that digit. Only digit values less than
   <em>limit</em> are accepted: for example, a <em>limit</em> of 8
-  accepts only octal digits. If <em>char</em> does not represent an
-  acceptable digit, <code>#f</code> is returned.</p>
-  <p>To accept the entire range, pass a <em>limit</em> of 10. It is
-  not an error to pass a limit less than 1 or greater than 10.
-  <em>limit</em> can be negative. It is an error if <em>limit</em>
-  is not a fixnum. <em>char</em> can be a fixnum or character
-  object.</p>
+  accepts only octal digits. To accept the entire range, pass a
+  <em>limit</em> of 10.</p>
+  <p>If <em>char</em> does not represent an acceptable digit,
+  <code>#f</code> is returned.</p>
   <p>(<strong>ascii-upper-case-value</strong> <em>char</em>
   <em>offset</em> <em>limit</em>)</p>
   <p>If <em>char</em> represents an ASCII upper-case letter, its
   distance from <code>A</code> is taken as an integer 0..25. Only
   distances less than <em>limit</em> are accepted: for example, a
   <em>limit</em> of 6 accepts only the letters <code>ABCDEF</code>.
-  An acceptable distance is returned with <em>offset</em> added to
-  it; give an <em>offset</em> of 0 to add nothing. If <em>char</em>
-  does not represent an acceptable letter, <code>#f</code> is
-  returned.</p>
-  <p>To accept the entire range, pass a <em>limit</em> of 26. It is
-  not an error to pass a limit less than 1 or greater than 26.
-  <em>offset</em> and <em>limit</em> can be negative. It is an
-  error if they are not fixnums. <em>char</em> can be a fixnum or
-  character object.</p>
+  To accept the entire range, pass a <em>limit</em> of 26.</p>
+  <p>An acceptable distance is returned with <em>offset</em> added
+  to it; give an <em>offset</em> of 0 to add nothing.</p>
+  <p>If <em>char</em> does not represent an acceptable letter,
+  <code>#f</code> is returned.</p>
   <p>(<strong>ascii-lower-case-value</strong> <em>char</em>
   <em>offset</em> <em>limit</em>)</p>
   <p>If <em>char</em> represents an ASCII lower-case letter, its
   distance from <code>a</code> is taken as an integer 0..25. Only
   distances less than <em>limit</em> are accepted: for example, a
   <em>limit</em> of 6 accepts only the letters <code>abcdef</code>.
-  An acceptable distance is returned with <em>offset</em> added to
-  it; give an <em>offset</em> of 0 to add nothing. If <em>char</em>
-  does not represent an acceptable letter, <code>#f</code> is
-  returned.</p>
-  <p>To accept the entire range, pass a <em>limit</em> of 26. It is
-  not an error to pass a limit less than 1 or greater than 26.
-  <em>offset</em> and <em>limit</em> can be negative. It is an
-  error if they are not fixnums. <em>char</em> can be a fixnum or
-  character object.</p>
+  To accept the entire range, pass a <em>limit</em> of 26.</p>
+  <p>An acceptable distance is returned with <em>offset</em> added
+  to it; give an <em>offset</em> of 0 to add nothing.</p>
+  <p>If <em>char</em> does not represent an acceptable letter,
+  <code>#f</code> is returned.</p>
   <h2>Examples</h2>
   <h3>Case conversion</h3>
   <p>The case conversion procedures in this SRFI can be implemented
