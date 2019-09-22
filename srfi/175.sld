@@ -1,6 +1,11 @@
 (define-library (srfi 175)
   (import (scheme base))
-  (export ascii-char?
+  (export ascii-codepoint?
+          ascii-bytevector?
+
+          ascii-char?
+          ascii-string?
+
           ascii-control?
           ascii-display?
           ascii-whitespace?
@@ -20,9 +25,9 @@
           ascii-nth-lower-case
           ascii-upcase
           ascii-downcase
-
-          ascii-digits
-          ascii-lower-case
-          ascii-upper-case
-          ascii-punctuation)
+          ascii-control->display
+          ascii-display->control
+          ascii-open-bracket
+          ascii-close-bracket
+          ascii-mirror-bracket)
   (include "175.scm"))

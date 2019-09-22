@@ -6,7 +6,9 @@
 (define substitutions
   '((= . fx=?) (< . fx<?) (<= . fx<=?) (> . fx>?) (>= . fx>=?)
     (+ . fx+) (- . fx-) (modulo . fxmod)
-    (open-binary-input-file . open-file-input-port) (read-u8 . get-u8)))
+    (open-binary-input-file . open-file-input-port)
+    (open-input-string . open-string-input-port)
+    (read-u8 . get-u8)))
 
 (define (substitute form)
   (if (pair? form)

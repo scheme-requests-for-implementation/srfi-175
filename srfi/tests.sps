@@ -12,9 +12,27 @@
        (display " from ")
        (display '(proc args ...))
        (newline)))))
-(want 10 (string-length ascii-digits))
-(want 26 (string-length ascii-lower-case))
-(want 26 (string-length ascii-upper-case))
+(want #f (ascii-codepoint? -1))
+(want #t (ascii-codepoint? 0))
+(want #t (ascii-codepoint? 127))
+(want #f (ascii-codepoint? 128))
+(want #t (ascii-char? (integer->char 0)))
+(want #t (ascii-char? (integer->char 127)))
+(want #f (ascii-char? (integer->char 128)))
+(want #t (ascii-string? ""))
+(want #t (ascii-string? "a"))
+(want #t (ascii-string? "a b c"))
+(want #f (ascii-string? "å b o"))
+(want #t (ascii-string? (make-string 1 (integer->char 127))))
+(want #f (ascii-string? (make-string 1 (integer->char 128))))
+(want #t (ascii-bytevector? (string->utf8 "")))
+(want #t (ascii-bytevector? (string->utf8 "a")))
+(want #t (ascii-bytevector? (string->utf8 "a b c")))
+(want #f (ascii-bytevector? (string->utf8 "å b o")))
+(want #t
+      (ascii-bytevector? (string->utf8 (make-string 1 (integer->char 127)))))
+(want #f
+      (ascii-bytevector? (string->utf8 (make-string 1 (integer->char 128)))))
 (want #t (ascii-display? #\ ))
 (want #f (ascii-display? #\	))
 (want #f (ascii-display? #\
@@ -25,24 +43,16 @@
 (want #f (ascii-space-or-tab? #\
 ))
 (want #f (ascii-display? (integer->char 13)))
-(define (increasing-ascii? string)
-  (let valid? ((i 0) (lastcc -1))
-    (or (fx=? i (string-length string))
-        (let ((cc (char->integer (string-ref string i))))
-          (and (fx<? lastcc cc) (valid? (fx+ i 1) cc))))))
-(want #t (increasing-ascii? ascii-digits))
-(want #t (increasing-ascii? ascii-lower-case))
-(want #t (increasing-ascii? ascii-upper-case))
-(want #t (increasing-ascii? ascii-punctuation))
-(let loop ((i 0))
-  (when (fx<? i 26)
-    (let ((lower (string-ref ascii-lower-case i))
-          (upper (string-ref ascii-upper-case i)))
-      (want upper (ascii-upcase upper))
-      (want upper (ascii-upcase lower))
-      (want lower (ascii-downcase upper))
-      (want lower (ascii-downcase lower))
-      (loop (fx+ i 1)))))
+(let ((lowers "abcdefghijklmnopqrstuvwxyz")
+      (uppers "ABCDEFGHIJKLMNOPQRSTUVWXYZ"))
+  (let loop ((i 0))
+    (when (fx<? i 26)
+      (let ((lower (string-ref lowers i)) (upper (string-ref uppers i)))
+        (want upper (ascii-upcase upper))
+        (want upper (ascii-upcase lower))
+        (want lower (ascii-downcase upper))
+        (want lower (ascii-downcase lower))
+        (loop (fx+ i 1))))))
 (let loop ((cc 0))
   (when (fx<? cc 128)
     (unless (ascii-alphabetic? cc)
@@ -66,7 +76,31 @@
                              (want #f (ascii-whitespace? cc))
                              (want #f (ascii-space-or-tab? cc)))
      ((ascii-control? cc) (want #f (ascii-display? cc))
-                          (want #f (ascii-punctuation? cc))))
+                          (want #f (ascii-punctuation? cc))
+                          (want cc
+                                (ascii-display->control
+                                 (ascii-control->display cc)))
+                          (want (integer->char cc)
+                                (ascii-display->control
+                                 (ascii-control->display (integer->char cc)))))
+     ((ascii-open-bracket cc) (want #f (ascii-close-bracket cc))
+                              (want cc
+                                    (ascii-mirror-bracket
+                                     (ascii-mirror-bracket cc)))
+                              (want cc
+                                    (ascii-open-bracket
+                                     (ascii-mirror-bracket
+                                      (ascii-close-bracket
+                                       (ascii-mirror-bracket cc))))))
+     ((ascii-close-bracket cc) (want #f (ascii-open-bracket cc))
+                               (want cc
+                                     (ascii-mirror-bracket
+                                      (ascii-mirror-bracket cc)))
+                               (want cc
+                                     (ascii-close-bracket
+                                      (ascii-mirror-bracket
+                                       (ascii-open-bracket
+                                        (ascii-mirror-bracket cc)))))))
     (loop (fx+ cc 1))))
 (want #f (ascii-char? -1))
 (want #f (ascii-char? 128))

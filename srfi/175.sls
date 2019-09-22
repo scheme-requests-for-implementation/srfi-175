@@ -1,7 +1,10 @@
 #!r6rs
 ;; Automatically generated
 (library (srfi :175)
-         (export ascii-char?
+         (export ascii-codepoint?
+                 ascii-bytevector?
+                 ascii-char?
+                 ascii-string?
                  ascii-control?
                  ascii-display?
                  ascii-whitespace?
@@ -20,10 +23,11 @@
                  ascii-nth-lower-case
                  ascii-upcase
                  ascii-downcase
-                 ascii-digits
-                 ascii-lower-case
-                 ascii-upper-case
-                 ascii-punctuation)
+                 ascii-control->display
+                 ascii-display->control
+                 ascii-open-bracket
+                 ascii-close-bracket
+                 ascii-mirror-bracket)
          (import (rnrs))
          (define (ensure-int x) (if (char? x) (char->integer x) x))
          (define (base-offset-limit x base offset limit)
@@ -31,7 +35,28 @@
              (and (fx>=? cc base)
                   (fx<? cc (fx+ base limit))
                   (fx+ offset (fx- cc base)))))
+         (define (char->int->char map-int char)
+           (let ((int (map-int (char->integer char))))
+             (and int (integer->char int))))
+         (define (int->char->int map-char int)
+           (let ((char (map-char (integer->char int))))
+             (and char (char->integer char))))
+         (define (ascii-codepoint? x)
+           (and (integer? x) (exact? x) (fx<=? 0 x 127)))
          (define (ascii-char? x) (and (char? x) (fx<? (char->integer x) 128)))
+         (define (ascii-bytevector? x)
+           (and (bytevector? x)
+                (let check ((i (fx- (bytevector-length x) 1)))
+                  (or (fx<? i 0)
+                      (and (fx<? (bytevector-u8-ref x i) 128)
+                           (check (fx- i 1)))))))
+         (define (ascii-string? x)
+           (and (string? x)
+                (let ((in (open-string-input-port x)))
+                  (let check ()
+                    (let ((char (read-char in)))
+                      (or (eof-object? char)
+                          (and (fx<? (char->integer char) 128) (check))))))))
          (define (ascii-control? x)
            (let ((cc (ensure-int x))) (or (fx<=? 0 cc 31) (fx=? cc 127))))
          (define (ascii-display? x)
@@ -78,7 +103,33 @@
            (if (char? x)
                (integer->char (ascii-downcase (char->integer x)))
                (or (ascii-upper-case-value x 97 26) x)))
-         (define ascii-digits "0123456789")
-         (define ascii-lower-case "abcdefghijklmnopqrstuvwxyz")
-         (define ascii-upper-case "ABCDEFGHIJKLMNOPQRSTUVWXYZ")
-         (define ascii-punctuation "!\"#$%&'()*+,-./:;<=>?@[\\]^_`{|}~"))
+         (define (ascii-control->display x)
+           (if (char? x)
+               (char->int->char ascii-control->display x)
+               (or (and (fx<=? 0 x 31) (fx+ x 64)) (and (fx=? x 127) 63))))
+         (define (ascii-display->control x)
+           (if (char? x)
+               (char->int->char ascii-display->control x)
+               (or (and (fx<=? 64 x 95) (fx- x 64)) (and (fx=? x 63) 127))))
+         (define (ascii-open-bracket char)
+           (case char
+             ((#\( #\[ #\{ #\<) char)
+             (else
+              (and (integer? char) (int->char->int ascii-open-bracket char)))))
+         (define (ascii-close-bracket char)
+           (case char
+             ((#\) #\] #\} #\>) char)
+             (else
+              (and (integer? char) (int->char->int ascii-close-bracket char)))))
+         (define (ascii-mirror-bracket char)
+           (case char
+             ((#\() #\))
+             ((#\)) #\()
+             ((#\[) #\])
+             ((#\]) #\[)
+             ((#\{) #\})
+             ((#\}) #\{)
+             ((#\<) #\>)
+             ((#\>) #\<)
+             (else
+              (and (integer? char) (int->char->int ascii-mirror-bracket char))))))
