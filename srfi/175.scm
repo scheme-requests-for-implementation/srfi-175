@@ -6,6 +6,14 @@
     (and (>= cc base) (< cc (+ base limit))
          (+ offset (- cc base)))))
 
+(define (char->int->char map-int char)
+  (let ((int (map-int (char->integer char))))
+    (and int (integer->char int))))
+
+(define (int->char->int map-char int)
+  (let ((char (map-char (integer->char int))))
+    (and char (char->integer char))))
+
 ;;
 
 (define (ascii-byte? x)
@@ -107,31 +115,25 @@
 
 (define (ascii-control->display x)
   (if (char? x)
-      (let ((x (ascii-control->display (char->integer x))))
-        (and x (integer->char x)))
+      (char->int->char ascii-control->display x)
       (or (and (<= 0 x #x1f) (+ x #x40))
           (and (= x #x7f) #x3f))))
 
 (define (ascii-display->control x)
   (if (char? x)
-      (let ((x (ascii-display->control (char->integer x))))
-        (and x (integer->char x)))
+      (char->int->char ascii-display->control x)
       (or (and (<= #x40 x #x5f) (- x #x40))
           (and (= x #x3f) #x7f))))
 
 (define (ascii-open-bracket char)
   (case char
     ((#\( #\[ #\{ #\<) char)
-    (else (and (integer? char)
-               (let ((br (ascii-open-bracket (integer->char char))))
-                 (and br (char->integer br)))))))
+    (else (and (integer? char) (int->char->int ascii-open-bracket char)))))
 
 (define (ascii-close-bracket char)
   (case char
     ((#\) #\] #\} #\>) char)
-    (else (and (integer? char)
-               (let ((br (ascii-close-bracket (integer->char char))))
-                 (and br (char->integer br)))))))
+    (else (and (integer? char) (int->char->int ascii-close-bracket char)))))
 
 (define (ascii-mirror-bracket char)
   (case char
@@ -143,6 +145,4 @@
     ((#\}) #\{)
     ((#\<) #\>)
     ((#\>) #\<)
-    (else (and (integer? char)
-               (let ((br (ascii-mirror-bracket (integer->char char))))
-                 (and br (char->integer br)))))))
+    (else (and (integer? char) (int->char->int ascii-mirror-bracket char)))))
