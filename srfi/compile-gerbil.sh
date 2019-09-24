@@ -1,3 +1,3 @@
 #!/bin/sh
 set -eu
-exec gxc 175.ss
+exec gxc -O 175.ss
