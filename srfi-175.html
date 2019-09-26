@@ -359,7 +359,8 @@
 #x0e SO   #x1e RS   #x2e .  #x3e &gt;  #x4e N  #x5e ^  #x6e n  #x7e ~
 #x0f SI   #x1f US   #x2f /  #x3f ?  #x4f O  #x5f _  #x6f o  #x7f DEL</pre>
   <h3>ASCII character classes</h3>
-  <pre>#x00..#x1f  control         #x20        space
+  <pre>
+#x00..#x1f  control         #x20        space
 #x21..#x2f  punctuation     #x30..#x39  digit
 #x3a..#x40  punctuation     #x41..#x5a  upper-case
 #x5b..#x60  punctuation     #x61..#x7a  lower-case
@@ -767,15 +768,18 @@
   simplicity, the following examples do not take
   fixnum-to-character conversion into account.</p>
   <pre>
-<code>(define (my-upcase char)   (or (ascii-lower-case-value char #x41 26) char))
-(define (my-downcase char) (or (ascii-upper-case-value char #x61 26) char))</code></pre>
+(define (my-upcase char)
+  (or (ascii-lower-case-value char #x41 26) char))
+
+(define (my-downcase char)
+  (or (ascii-upper-case-value char #x61 26) char))</pre>
   <h3>Number parsing</h3>
   <p>Since there are lots of slightly different number syntaxes,
   this SRFI does not provide procedures to convert between numbers
   and strings. Instead, the transformation procedures let you
   easily roll your own. Here is one way to do it:</p>
   <pre>
-<code>(define (parse-binary-digit  char) (ascii-digit-value char 2))
+(define (parse-binary-digit  char) (ascii-digit-value char 2))
 (define (parse-octal-digit   char) (ascii-digit-value char 8))
 (define (parse-decimal-digit char) (ascii-digit-value char 10))
 
@@ -786,7 +790,7 @@
 
 (define (quote-hex-digit n)
   (cond ((&lt; n 10) (ascii-nth-digit n))
-        ((&lt; n 16) (ascii-nth-lower-case (- n 10)))))</code></pre>
+        ((&lt; n 16) (ascii-nth-lower-case (- n 10)))))</pre>
   <h3>Caesar cipher</h3>
   <p>The Caesar cipher is a naive encryption method used
   successfully in ancient Rome. It involves rotating each letter by
@@ -797,12 +801,13 @@
   ROT13 is a Caesar variant that is its own inverse: a positive
   rotation by 13 is identical to a negative rotation by -13.
   Non-alphabetic characters are left intact.</p>
-  <pre><code>(define (caesar-char rot char)
+  <pre>
+(define (caesar-char rot char)
   (or (let ((n (ascii-lower-case-value char rot 26)))
         (and n (ascii-nth-lower-case n)))
       (let ((n (ascii-upper-case-value char rot 26)))
         (and n (ascii-nth-upper-case n)))
-      char))</code></pre>
+      char))</pre>
   <h3>Strings utility</h3>
   <p>The Unix <code>strings</code> utility reads a binary file,
   looking for contiguous sequences of displayable ASCII bytes and
@@ -812,7 +817,8 @@
   procedure that displays <code>(list-&gt;string (map
   integer-&gt;char (reverse stride)))</code> if <code>stride</code>
   is at least 4 bytes long.</p>
-  <pre><code>(let loop ((stride '()))
+  <pre>
+(let loop ((stride '()))
   (let ((byte (read-u8 port)))
     (cond ((eof-object? byte)
            (show stride))
@@ -820,7 +826,7 @@
            (show stride)
            (loop '()))
           (else
-           (loop (cons byte stride))))))</code></pre>
+           (loop (cons byte stride))))))</pre>
   <h2>Implementation</h2>
   <p>A sample implementation is available at <a class="eponymous"
   href=
