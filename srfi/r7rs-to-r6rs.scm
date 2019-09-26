@@ -17,10 +17,14 @@
       (let ((sub (assoc form substitutions)))
         (if sub (cdr sub) form))))
 
-(define (pretty-print out form)
+(define (displayln x)
+  (display x)
+  (newline))
+
+(define (pretty-print form)
   (cond-expand
-    (chibi (show out (pretty form)))
-    (else (write form out) (newline out))))
+    (chibi (show (current-output-port) (pretty form)))
+    (else (write form) (newline))))
 
 (define (read-all port)
   (let loop ((forms '()))
@@ -33,10 +37,11 @@
            (call-with-input-file filename read-all))))
 
 (define (write-r6rs-file filename . forms)
-  (call-with-output-file filename
-    (lambda (out)
-      (display "#!r6rs\n;; Automatically generated\n" out)
-      (for-each (lambda (form) (pretty-print out form)) forms))))
+  (with-output-to-file filename
+    (lambda ()
+      (displayln "#!r6rs")
+      (displayln ";; Automatically generated")
+      (for-each (lambda (form) (pretty-print form)) forms))))
 
 (define (write-r6rs-library filename libname exports body)
   (write-r6rs-file
