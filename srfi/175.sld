@@ -29,5 +29,17 @@
           ascii-display->control
           ascii-open-bracket
           ascii-close-bracket
-          ascii-mirror-bracket)
+          ascii-mirror-bracket
+
+          ascii-ci=?
+          ascii-ci<?
+          ascii-ci>?
+          ascii-ci<=?
+          ascii-ci>=?
+
+          ascii-string-ci=?
+          ascii-string-ci<?
+          ascii-string-ci>?
+          ascii-string-ci<=?
+          ascii-string-ci>=?)
   (include "175.scm"))

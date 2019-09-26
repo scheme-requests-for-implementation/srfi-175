@@ -146,3 +146,60 @@
     ((#\<) #\>)
     ((#\>) #\<)
     (else (and (integer? char) (int->char->int ascii-mirror-bracket char)))))
+
+(define (ascii-ci-cmp char1 char2)
+  (let ((cc1 (ensure-int char1))
+        (cc2 (ensure-int char2)))
+    (when (<= #x61 cc1 #x7a) (set! cc1 (- cc1 #x20)))
+    (when (<= #x61 cc2 #x7a) (set! cc2 (- cc2 #x20)))
+    (cond ((< cc1 cc2) -1)
+          ((> cc1 cc2) 1)
+          (else 0))))
+
+(define (ascii-ci=? char1 char2)
+  (= (ascii-ci-cmp char1 char2) 0))
+
+(define (ascii-ci<? char1 char2)
+  (< (ascii-ci-cmp char1 char2) 0))
+
+(define (ascii-ci>? char1 char2)
+  (> (ascii-ci-cmp char1 char2) 0))
+
+(define (ascii-ci<=? char1 char2)
+  (<= (ascii-ci-cmp char1 char2) 0))
+
+(define (ascii-ci>=? char1 char2)
+  (>= (ascii-ci-cmp char1 char2) 0))
+
+(define (ascii-string-ci-cmp string1 string2)
+  (let ((in1 (open-input-string string1))
+        (in2 (open-input-string string2)))
+    (let loop ()
+      (let ((char1 (read-char in1))
+            (char2 (read-char in2)))
+        ;;(for-each display (list "comparing " char1 " and " char2))
+        ;;(newline)
+        (cond ((eof-object? char1) (if (eof-object? char2) 0 -1))
+              ((eof-object? char2) 1)
+              (else (let ((cc1 (char->integer char1))
+                          (cc2 (char->integer char2)))
+                      (when (<= #x61 cc1 #x7a) (set! cc1 (- cc1 #x20)))
+                      (when (<= #x61 cc2 #x7a) (set! cc2 (- cc2 #x20)))
+                      (cond ((< cc1 cc2) -1)
+                            ((> cc1 cc2) 1)
+                            (else (loop))))))))))
+
+(define (ascii-string-ci=? string1 string2)
+  (= (ascii-string-ci-cmp string1 string2) 0))
+
+(define (ascii-string-ci<? string1 string2)
+  (< (ascii-string-ci-cmp string1 string2) 0))
+
+(define (ascii-string-ci>? string1 string2)
+  (> (ascii-string-ci-cmp string1 string2) 0))
+
+(define (ascii-string-ci<=? string1 string2)
+  (<= (ascii-string-ci-cmp string1 string2) 0))
+
+(define (ascii-string-ci>=? string1 string2)
+  (>= (ascii-string-ci-cmp string1 string2) 0))

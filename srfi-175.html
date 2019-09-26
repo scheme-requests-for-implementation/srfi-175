@@ -321,8 +321,9 @@
   </ul>
   <p>For every procedure in this SRFI:</p>
   <ul>
-    <li>Any argument named <em>char</em> is either a character
-    object or an exact integer in the char-fix range.</li>
+    <li>Any argument named <em>char</em> or <em>char1</em> or
+    <em>char2</em> is either a character object or an exact integer
+    in the char-fix range.</li>
     <li>Any argument named <em>offset</em> or <em>limit</em> or
     <em>n</em> is an exact integer in the char-fix range.</li>
     <li>If the procedure takes both <em>offset</em> and
@@ -425,6 +426,60 @@
   <p>Returns <code>#t</code> if <em>char</em> represents an ASCII
   character in the <em>lower-case</em> class. Else returns
   <code>#f</code>.</p>
+  <h3>Case-insensitive character comparison procedures</h3>
+  <p>(<strong>ascii-ci=?</strong> <em>char1</em>
+  <em>char2</em>)</p>
+  <p>(<strong>ascii-ci&lt;?</strong> <em>char1</em>
+  <em>char2</em>)</p>
+  <p>(<strong>ascii-ci&gt;?</strong> <em>char1</em>
+  <em>char2</em>)</p>
+  <p>(<strong>ascii-ci&lt;?=</strong> <em>char1</em>
+  <em>char2</em>)</p>
+  <p>(<strong>ascii-ci&gt;?=</strong> <em>char1</em>
+  <em>char2</em>)</p>
+  <p>These procedures test whether the codepoint of <em>char1</em>
+  is equal to, less than, greater than, less than or equal to, or
+  greater than or equal to the codepoint of <em>char2</em>.</p>
+  <p>The comparison is case-insensitive for ASCII letters, so that
+  any letter in the <code>a..z</code> range is mapped to the same
+  letter in the <code>A..Z</code> range before comparison. For
+  non-letters, and for non-ASCII characters, the codepoint is
+  compared without any case folding. In particular, fancy
+  Unicode-aware case folding is not applied.</p>
+  <p>Note that <em>char1</em> and <em>char2</em> do not need to be
+  of the same type. It is permitted for one of them to be a
+  character object and the other to be an integer.</p>
+  <p>For case-sensitive comparison, the standard
+  <strong>char=?</strong> etc. work fine for ASCII; hence this SRFI
+  does not provide case-sensitive equivalents.</p>
+  <h3>Case-insensitive string comparison procedures</h3>
+  <p>(<strong>ascii-string-ci=?</strong> <em>string1</em>
+  <em>string2</em>)</p>
+  <p>(<strong>ascii-string-ci&lt;?</strong> <em>string1</em>
+  <em>string2</em>)</p>
+  <p>(<strong>ascii-string-ci&gt;?</strong> <em>string1</em>
+  <em>string2</em>)</p>
+  <p>(<strong>ascii-string-ci&lt;=?</strong> <em>string1</em>
+  <em>string2</em>)</p>
+  <p>(<strong>ascii-string-ci&gt;=?</strong> <em>string1</em>
+  <em>string2</em>)</p>
+  <p>These procedures test whether <em>string1</em> is equal to,
+  less than, greater than, less than or equal to, or greater than
+  or equal to <em>string2</em> when adjacent characters are
+  compared in order from left to right.</p>
+  <p>The comparison is case-insensitive for ASCII letters, so that
+  any letter in the <code>a..z</code> range is mapped to the same
+  letter in the <code>A..Z</code> range before comparison. For
+  non-letters, and for non-ASCII characters, the codepoint is
+  compared without any case folding. In particular, fancy
+  Unicode-aware case folding is not applied.</p>
+  <p>If the two strings are of different lengths, and their
+  characters are equal all the way up to the length of the shorter
+  string, then the shorter string is considered less than the
+  longer one. Two zero-length strings are considered equal.</p>
+  <p>For case-sensitive comparison, the standard
+  <strong>string=?</strong> etc. work fine for ASCII; hence this
+  SRFI does not provide case-sensitive equivalents.</p>
   <h3>Case conversion procedures</h3>
   <p>(<strong>ascii-upcase</strong> <em>char</em>)</p>
   <p>If <em>char</em> represents an ASCII character in the

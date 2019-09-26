@@ -27,7 +27,17 @@
                  ascii-display->control
                  ascii-open-bracket
                  ascii-close-bracket
-                 ascii-mirror-bracket)
+                 ascii-mirror-bracket
+                 ascii-ci=?
+                 ascii-ci<?
+                 ascii-ci>?
+                 ascii-ci<=?
+                 ascii-ci>=?
+                 ascii-string-ci=?
+                 ascii-string-ci<?
+                 ascii-string-ci>?
+                 ascii-string-ci<=?
+                 ascii-string-ci>=?)
          (import (rnrs))
          (define (ensure-int x) (if (char? x) (char->integer x) x))
          (define (base-offset-limit x base offset limit)
@@ -132,4 +142,41 @@
              ((#\<) #\>)
              ((#\>) #\<)
              (else
-              (and (integer? char) (int->char->int ascii-mirror-bracket char))))))
+              (and (integer? char) (int->char->int ascii-mirror-bracket char)))))
+         (define (ascii-ci-cmp char1 char2)
+           (let ((cc1 (ensure-int char1)) (cc2 (ensure-int char2)))
+             (when (fx<=? 97 cc1 122) (set! cc1 (fx- cc1 32)))
+             (when (fx<=? 97 cc2 122) (set! cc2 (fx- cc2 32)))
+             (cond ((fx<? cc1 cc2) -1) ((fx>? cc1 cc2) 1) (else 0))))
+         (define (ascii-ci=? char1 char2) (fx=? (ascii-ci-cmp char1 char2) 0))
+         (define (ascii-ci<? char1 char2) (fx<? (ascii-ci-cmp char1 char2) 0))
+         (define (ascii-ci>? char1 char2) (fx>? (ascii-ci-cmp char1 char2) 0))
+         (define (ascii-ci<=? char1 char2)
+           (fx<=? (ascii-ci-cmp char1 char2) 0))
+         (define (ascii-ci>=? char1 char2)
+           (fx>=? (ascii-ci-cmp char1 char2) 0))
+         (define (ascii-string-ci-cmp string1 string2)
+           (let ((in1 (open-string-input-port string1))
+                 (in2 (open-string-input-port string2)))
+             (let loop ()
+               (let ((char1 (read-char in1)) (char2 (read-char in2)))
+                 (cond ((eof-object? char1) (if (eof-object? char2) 0 -1))
+                       ((eof-object? char2) 1)
+                       (else
+                        (let ((cc1 (char->integer char1))
+                              (cc2 (char->integer char2)))
+                          (when (fx<=? 97 cc1 122) (set! cc1 (fx- cc1 32)))
+                          (when (fx<=? 97 cc2 122) (set! cc2 (fx- cc2 32)))
+                          (cond ((fx<? cc1 cc2) -1)
+                                ((fx>? cc1 cc2) 1)
+                                (else (loop))))))))))
+         (define (ascii-string-ci=? string1 string2)
+           (fx=? (ascii-string-ci-cmp string1 string2) 0))
+         (define (ascii-string-ci<? string1 string2)
+           (fx<? (ascii-string-ci-cmp string1 string2) 0))
+         (define (ascii-string-ci>? string1 string2)
+           (fx>? (ascii-string-ci-cmp string1 string2) 0))
+         (define (ascii-string-ci<=? string1 string2)
+           (fx<=? (ascii-string-ci-cmp string1 string2) 0))
+         (define (ascii-string-ci>=? string1 string2)
+           (fx>=? (ascii-string-ci-cmp string1 string2) 0)))
