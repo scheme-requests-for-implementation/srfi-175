@@ -1,5 +1,7 @@
 #!r6rs
 ;; Automatically generated
+;; Copyright 2019 Lassi Kortela
+;; SPDX-License-Identifier: MIT
 (library (srfi :175)
          (export ascii-codepoint?
                  ascii-bytevector?

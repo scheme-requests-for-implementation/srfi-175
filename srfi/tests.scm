@@ -1,3 +1,6 @@
+;; Copyright 2019 Lassi Kortela
+;; SPDX-License-Identifier: MIT
+
 (import (scheme base) (scheme file) (scheme read) (scheme write) (srfi 175))
 
 (define-syntax want

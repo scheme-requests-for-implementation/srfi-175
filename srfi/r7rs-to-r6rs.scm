@@ -41,6 +41,8 @@
     (lambda ()
       (displayln "#!r6rs")
       (displayln ";; Automatically generated")
+      (displayln ";; Copyright 2019 Lassi Kortela")
+      (displayln ";; SPDX-License-Identifier: MIT")
       (for-each (lambda (form) (pretty-print form)) forms))))
 
 (define (write-r6rs-library filename libname exports body)

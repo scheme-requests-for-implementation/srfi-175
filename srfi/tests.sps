@@ -1,5 +1,7 @@
 #!r6rs
 ;; Automatically generated
+;; Copyright 2019 Lassi Kortela
+;; SPDX-License-Identifier: MIT
 (import (rnrs) (srfi :175))
 (define-syntax want
   (syntax-rules ()

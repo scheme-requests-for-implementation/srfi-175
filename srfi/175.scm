@@ -1,3 +1,6 @@
+;; Copyright 2019 Lassi Kortela
+;; SPDX-License-Identifier: MIT
+
 (define (ensure-int x)
   (if (char? x) (char->integer x) x))
 
