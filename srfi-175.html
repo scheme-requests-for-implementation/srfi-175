@@ -86,6 +86,138 @@
     <tbody>
       <tr>
         <td>
+          <p><strong>ascii-char?</strong></p>
+        </td>
+        <td>
+          <p><strong>char?</strong></p>
+        </td>
+        <td>
+          <p>R<sup>2</sup>RS</p>
+        </td>
+      </tr>
+      <tr>
+        <td>
+          <p><strong>ascii-string?</strong></p>
+        </td>
+        <td>
+          <p><strong>string?</strong></p>
+        </td>
+        <td>
+          <p>R<sup>2</sup>RS</p>
+        </td>
+      </tr>
+      <tr>
+        <td>
+          <p><strong>ascii-ci=?</strong></p>
+        </td>
+        <td>
+          <p><strong>char-ci=?</strong></p>
+        </td>
+        <td>
+          <p>R<sup>2</sup>RS</p>
+        </td>
+      </tr>
+      <tr>
+        <td>
+          <p><strong>ascii-ci&lt;?</strong></p>
+        </td>
+        <td>
+          <p><strong>char-ci&lt;?</strong></p>
+        </td>
+        <td>
+          <p>R<sup>2</sup>RS</p>
+        </td>
+      </tr>
+      <tr>
+        <td>
+          <p><strong>ascii-ci&gt;?</strong></p>
+        </td>
+        <td>
+          <p><strong>char-ci&gt;?</strong></p>
+        </td>
+        <td>
+          <p>R<sup>2</sup>RS</p>
+        </td>
+      </tr>
+      <tr>
+        <td>
+          <p><strong>ascii-ci&lt;=?</strong></p>
+        </td>
+        <td>
+          <p><strong>char-ci&lt;=?</strong></p>
+        </td>
+        <td>
+          <p>R<sup>2</sup>RS</p>
+        </td>
+      </tr>
+      <tr>
+        <td>
+          <p><strong>ascii-ci&gt;=?</strong></p>
+        </td>
+        <td>
+          <p><strong>char-ci&gt;=?</strong></p>
+        </td>
+        <td>
+          <p>R<sup>2</sup>RS</p>
+        </td>
+      </tr>
+      <tr>
+        <td>
+          <p><strong>ascii-string-ci=?</strong></p>
+        </td>
+        <td>
+          <p><strong>string-ci=?</strong></p>
+        </td>
+        <td>
+          <p>R<sup>2</sup>RS</p>
+        </td>
+      </tr>
+      <tr>
+        <td>
+          <p><strong>ascii-string-ci&lt;?</strong></p>
+        </td>
+        <td>
+          <p><strong>string-ci&lt;?</strong></p>
+        </td>
+        <td>
+          <p>R<sup>2</sup>RS</p>
+        </td>
+      </tr>
+      <tr>
+        <td>
+          <p><strong>ascii-string-ci&gt;?</strong></p>
+        </td>
+        <td>
+          <p><strong>string-ci&gt;?</strong></p>
+        </td>
+        <td>
+          <p>R<sup>2</sup>RS</p>
+        </td>
+      </tr>
+      <tr>
+        <td>
+          <p><strong>ascii-string-ci&lt;=?</strong></p>
+        </td>
+        <td>
+          <p><strong>string-ci&lt;=?</strong></p>
+        </td>
+        <td>
+          <p>R<sup>2</sup>RS</p>
+        </td>
+      </tr>
+      <tr>
+        <td>
+          <p><strong>ascii-string-ci&gt;=?</strong></p>
+        </td>
+        <td>
+          <p><strong>string-ci&gt;=?</strong></p>
+        </td>
+        <td>
+          <p>R<sup>2</sup>RS</p>
+        </td>
+      </tr>
+      <tr>
+        <td>
           <p><strong>ascii-alphabetic?</strong></p>
         </td>
         <td>
@@ -177,9 +309,11 @@
   <p><sup>*</sup>Note that the <strong>ascii-digit-value</strong>
   procedure takes a <em>limit</em> argument that the standard
   <strong>digit-value</strong> procedure does not take.</p>
-  <p>The standard Scheme procedures listed above require their
-  arguments to be character objects. The equivalents in this SRFI
-  accept fixnums in addition to character objects.</p>
+  <p>The standard Scheme character procedures listed above require
+  their arguments to be character objects. The equivalents in this
+  SRFI accept fixnums in addition to character objects. However,
+  <strong>ascii-char?</strong> like the standard
+  <strong>char?</strong> only tests for a character object.</p>
   <h3>Capsule history of ASCII</h3>
   <p>The ASCII (American Standard Code for Information Interchange)
   character set is standardized by ANSI (American National
