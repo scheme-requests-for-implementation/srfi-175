@@ -59,12 +59,12 @@
   <p>Scheme has a standard character data type which is very useful
   for disambiguating between characters and integers. However, code
   dealing with low-level binary formats typically uses byte ports
-  and bytevectors whose elements small, exact nonnegative integers.
-  It is convenient to treat those integers as if they were
-  characters (which they often represent, as most binary formats
-  also contain strings of text). For this reason, the procedures in
-  this SRFI taking character objects also accept integers in their
-  place.</p>
+  and bytevectors whose elements are small, exact nonnegative
+  integers. It is convenient to treat those integers as if they
+  were characters (which they often represent, as most binary
+  formats also contain strings of text). For this reason, the
+  procedures in this SRFI taking character objects also accept
+  integers in their place.</p>
   <p>This SRFI has been designed with the assumption that
   codepoints 0..127 correspond to ASCII in in the Scheme
   implementation's native character datatype. We could not come up
