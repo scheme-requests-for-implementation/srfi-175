@@ -1,3 +1,6 @@
+;; Copyright 2019 Lassi Kortela
+;; SPDX-License-Identifier: MIT
+
 (define (ensure-int x)
   (if (char? x) (char->integer x) x))
 
@@ -30,11 +33,13 @@
 
 (define (ascii-string? x)
   (and (string? x)
-       (let ((in (open-input-string x)))
-         (let check ()
-           (let ((char (read-char in)))
-             (or (eof-object? char)
-                 (and (< (char->integer char) #x80) (check))))))))
+       (call-with-port
+        (open-input-string x)
+        (lambda (in)
+          (let check ()
+            (let ((char (read-char in)))
+              (or (eof-object? char)
+                  (and (< (char->integer char) #x80) (check)))))))))
 
 (define (ascii-control? x)
   (let ((cc (ensure-int x)))
@@ -146,3 +151,62 @@
     ((#\<) #\>)
     ((#\>) #\<)
     (else (and (integer? char) (int->char->int ascii-mirror-bracket char)))))
+
+(define (ascii-ci-cmp char1 char2)
+  (let ((cc1 (ensure-int char1))
+        (cc2 (ensure-int char2)))
+    (when (<= #x61 cc1 #x7a) (set! cc1 (- cc1 #x20)))
+    (when (<= #x61 cc2 #x7a) (set! cc2 (- cc2 #x20)))
+    (cond ((< cc1 cc2) -1)
+          ((> cc1 cc2) 1)
+          (else 0))))
+
+(define (ascii-ci=? char1 char2)
+  (= (ascii-ci-cmp char1 char2) 0))
+
+(define (ascii-ci<? char1 char2)
+  (< (ascii-ci-cmp char1 char2) 0))
+
+(define (ascii-ci>? char1 char2)
+  (> (ascii-ci-cmp char1 char2) 0))
+
+(define (ascii-ci<=? char1 char2)
+  (<= (ascii-ci-cmp char1 char2) 0))
+
+(define (ascii-ci>=? char1 char2)
+  (>= (ascii-ci-cmp char1 char2) 0))
+
+(define (ascii-string-ci-cmp string1 string2)
+  (call-with-port
+   (open-input-string string1)
+   (lambda (in1)
+     (call-with-port
+      (open-input-string string2)
+      (lambda (in2)
+        (let loop ()
+          (let ((char1 (read-char in1))
+                (char2 (read-char in2)))
+            (cond ((eof-object? char1) (if (eof-object? char2) 0 -1))
+                  ((eof-object? char2) 1)
+                  (else (let ((cc1 (char->integer char1))
+                              (cc2 (char->integer char2)))
+                          (when (<= #x61 cc1 #x7a) (set! cc1 (- cc1 #x20)))
+                          (when (<= #x61 cc2 #x7a) (set! cc2 (- cc2 #x20)))
+                          (cond ((< cc1 cc2) -1)
+                                ((> cc1 cc2) 1)
+                                (else (loop)))))))))))))
+
+(define (ascii-string-ci=? string1 string2)
+  (= (ascii-string-ci-cmp string1 string2) 0))
+
+(define (ascii-string-ci<? string1 string2)
+  (< (ascii-string-ci-cmp string1 string2) 0))
+
+(define (ascii-string-ci>? string1 string2)
+  (> (ascii-string-ci-cmp string1 string2) 0))
+
+(define (ascii-string-ci<=? string1 string2)
+  (<= (ascii-string-ci-cmp string1 string2) 0))
+
+(define (ascii-string-ci>=? string1 string2)
+  (>= (ascii-string-ci-cmp string1 string2) 0))

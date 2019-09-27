@@ -1,5 +1,7 @@
 #!r6rs
 ;; Automatically generated
+;; Copyright 2019 Lassi Kortela
+;; SPDX-License-Identifier: MIT
 (import (rnrs) (srfi :175))
 (define (hex-digit char)
   (or (ascii-digit-value char 10)
@@ -20,14 +22,17 @@
           (loop (fx+ i 1) (cons (caesar-char rotation char) chars))))))
 (define (strings byte-port)
   (define (disp stride)
-    (when (fx>=? (length stride) 4)
-      (display (list->string (map integer->char (reverse stride))))
-      (newline)))
-  (let loop ((stride '()))
-    (let ((byte (get-u8 byte-port)))
-      (cond ((eof-object? byte) (disp stride))
-            ((not (ascii-display? byte)) (disp stride) (loop '()))
-            (else (loop (cons byte stride)))))))
+    (and (fx>=? (length stride) 4)
+         (begin (display (list->string (map integer->char (reverse stride))))
+                (newline)
+                #t)))
+  (let loop ((stride '()) (n 20))
+    (and (fx>? n 0)
+         (let ((byte (get-u8 byte-port)))
+           (cond ((eof-object? byte) (disp stride))
+                 ((not (ascii-display? byte))
+                  (loop '() (if (disp stride) (fx- n 1) n)))
+                 (else (loop (cons byte stride) n)))))))
 (define (span a b)
   (let loop ((b b) (acc '()))
     (if (fx<? b a) acc (loop (fx- b 1) (cons b acc)))))

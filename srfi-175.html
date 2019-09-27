@@ -64,6 +64,13 @@
   also contain strings of text). For this reason, the procedures in
   this SRFI taking character objects also accept integers in their
   place.</p>
+  <p>This SRFI has been designed with the assumption that
+  codepoints 0..127 correspond to ASCII in in the Scheme
+  implementation's native character datatype. We could not come up
+  with any implementations where this is not the case. The only
+  non-ASCII-superset character set we could think of is EBCDIC,
+  which is fringe enough that it does not seem worth worrying about
+  it.</p>
   <h3>Procedure equivalence</h3>
   <p>The following table lists all procedures defined in this SRFI
   that have direct equivalents in the Scheme R<sup>n</sup>RS
@@ -77,6 +84,138 @@
       </tr>
     </thead>
     <tbody>
+      <tr>
+        <td>
+          <p><strong>ascii-char?</strong></p>
+        </td>
+        <td>
+          <p><strong>char?</strong></p>
+        </td>
+        <td>
+          <p>R<sup>2</sup>RS</p>
+        </td>
+      </tr>
+      <tr>
+        <td>
+          <p><strong>ascii-string?</strong></p>
+        </td>
+        <td>
+          <p><strong>string?</strong></p>
+        </td>
+        <td>
+          <p>R<sup>2</sup>RS</p>
+        </td>
+      </tr>
+      <tr>
+        <td>
+          <p><strong>ascii-ci=?</strong></p>
+        </td>
+        <td>
+          <p><strong>char-ci=?</strong></p>
+        </td>
+        <td>
+          <p>R<sup>2</sup>RS</p>
+        </td>
+      </tr>
+      <tr>
+        <td>
+          <p><strong>ascii-ci&lt;?</strong></p>
+        </td>
+        <td>
+          <p><strong>char-ci&lt;?</strong></p>
+        </td>
+        <td>
+          <p>R<sup>2</sup>RS</p>
+        </td>
+      </tr>
+      <tr>
+        <td>
+          <p><strong>ascii-ci&gt;?</strong></p>
+        </td>
+        <td>
+          <p><strong>char-ci&gt;?</strong></p>
+        </td>
+        <td>
+          <p>R<sup>2</sup>RS</p>
+        </td>
+      </tr>
+      <tr>
+        <td>
+          <p><strong>ascii-ci&lt;=?</strong></p>
+        </td>
+        <td>
+          <p><strong>char-ci&lt;=?</strong></p>
+        </td>
+        <td>
+          <p>R<sup>2</sup>RS</p>
+        </td>
+      </tr>
+      <tr>
+        <td>
+          <p><strong>ascii-ci&gt;=?</strong></p>
+        </td>
+        <td>
+          <p><strong>char-ci&gt;=?</strong></p>
+        </td>
+        <td>
+          <p>R<sup>2</sup>RS</p>
+        </td>
+      </tr>
+      <tr>
+        <td>
+          <p><strong>ascii-string-ci=?</strong></p>
+        </td>
+        <td>
+          <p><strong>string-ci=?</strong></p>
+        </td>
+        <td>
+          <p>R<sup>2</sup>RS</p>
+        </td>
+      </tr>
+      <tr>
+        <td>
+          <p><strong>ascii-string-ci&lt;?</strong></p>
+        </td>
+        <td>
+          <p><strong>string-ci&lt;?</strong></p>
+        </td>
+        <td>
+          <p>R<sup>2</sup>RS</p>
+        </td>
+      </tr>
+      <tr>
+        <td>
+          <p><strong>ascii-string-ci&gt;?</strong></p>
+        </td>
+        <td>
+          <p><strong>string-ci&gt;?</strong></p>
+        </td>
+        <td>
+          <p>R<sup>2</sup>RS</p>
+        </td>
+      </tr>
+      <tr>
+        <td>
+          <p><strong>ascii-string-ci&lt;=?</strong></p>
+        </td>
+        <td>
+          <p><strong>string-ci&lt;=?</strong></p>
+        </td>
+        <td>
+          <p>R<sup>2</sup>RS</p>
+        </td>
+      </tr>
+      <tr>
+        <td>
+          <p><strong>ascii-string-ci&gt;=?</strong></p>
+        </td>
+        <td>
+          <p><strong>string-ci&gt;=?</strong></p>
+        </td>
+        <td>
+          <p>R<sup>2</sup>RS</p>
+        </td>
+      </tr>
       <tr>
         <td>
           <p><strong>ascii-alphabetic?</strong></p>
@@ -170,9 +309,11 @@
   <p><sup>*</sup>Note that the <strong>ascii-digit-value</strong>
   procedure takes a <em>limit</em> argument that the standard
   <strong>digit-value</strong> procedure does not take.</p>
-  <p>The standard Scheme procedures listed above require their
-  arguments to be character objects. The equivalents in this SRFI
-  accept fixnums in addition to character objects.</p>
+  <p>The standard Scheme character procedures listed above require
+  their arguments to be character objects. The equivalents in this
+  SRFI accept fixnums in addition to character objects. However,
+  <strong>ascii-char?</strong> like the standard
+  <strong>char?</strong> only tests for a character object.</p>
   <h3>Capsule history of ASCII</h3>
   <p>The ASCII (American Standard Code for Information Interchange)
   character set is standardized by ANSI (American National
@@ -218,7 +359,8 @@
 #x0e SO   #x1e RS   #x2e .  #x3e &gt;  #x4e N  #x5e ^  #x6e n  #x7e ~
 #x0f SI   #x1f US   #x2f /  #x3f ?  #x4f O  #x5f _  #x6f o  #x7f DEL</pre>
   <h3>ASCII character classes</h3>
-  <pre>#x00..#x1f  control         #x20        space
+  <pre>
+#x00..#x1f  control         #x20        space
 #x21..#x2f  punctuation     #x30..#x39  digit
 #x3a..#x40  punctuation     #x41..#x5a  upper-case
 #x5b..#x60  punctuation     #x61..#x7a  lower-case
@@ -321,8 +463,9 @@
   </ul>
   <p>For every procedure in this SRFI:</p>
   <ul>
-    <li>Any argument named <em>char</em> is either a character
-    object or an exact integer in the char-fix range.</li>
+    <li>Any argument named <em>char</em> or <em>char1</em> or
+    <em>char2</em> is either a character object or an exact integer
+    in the char-fix range.</li>
     <li>Any argument named <em>offset</em> or <em>limit</em> or
     <em>n</em> is an exact integer in the char-fix range.</li>
     <li>If the procedure takes both <em>offset</em> and
@@ -350,21 +493,12 @@
   bytevector.</p>
   <p>(<strong>ascii-char?</strong> <em>obj</em>)</p>
   <p>Returns <code>#t</code> if <em>obj</em> is a character object
-  in the ASCII inclusive range <code>#x00..#x7f</code>. Else
-  returns <code>#f</code>.</p>
-  <p>In a Scheme implementation whose native character set is
-  Unicode or another extended ASCII character set, the codepoints
-  <code>#x00..#x7f</code> represent ASCII. An implementation whose
-  native character set is something else is permitted to assign
-  ASCII to some other contiguous range of character values so that
-  <code>(ascii-char? (integer-&gt;char 0))</code> is false, and
-  this SRFI has been designed to work correctly even in that
-  case.</p>
+  whose codepoint lies in the inclusive range
+  <code>#x00..#x7f</code>. Else returns <code>#f</code>.</p>
   <p>(<strong>ascii-string?</strong> <em>obj</em>)</p>
   <p>Returns <code>#t</code> if <em>obj</em> is a string and
-  contains no character with a codepoint outside the ASCII
-  inclusive range <code>#x00..#x7f</code>. Else returns
-  <code>#f</code>.</p>
+  contains no character with a codepoint outside the inclusive
+  range <code>#x00..#x7f</code>. Else returns <code>#f</code>.</p>
   <p>A zero-length string is considered an ASCII string.</p>
   <h3>Predicates to test for subsets of ASCII</h3>
   <p>(<strong>ascii-control?</strong> <em>char</em>)</p>
@@ -425,6 +559,64 @@
   <p>Returns <code>#t</code> if <em>char</em> represents an ASCII
   character in the <em>lower-case</em> class. Else returns
   <code>#f</code>.</p>
+  <h3>Case-insensitive character comparison procedures</h3>
+  <p>(<strong>ascii-ci=?</strong> <em>char1</em>
+  <em>char2</em>)</p>
+  <p>(<strong>ascii-ci&lt;?</strong> <em>char1</em>
+  <em>char2</em>)</p>
+  <p>(<strong>ascii-ci&gt;?</strong> <em>char1</em>
+  <em>char2</em>)</p>
+  <p>(<strong>ascii-ci&lt;?=</strong> <em>char1</em>
+  <em>char2</em>)</p>
+  <p>(<strong>ascii-ci&gt;?=</strong> <em>char1</em>
+  <em>char2</em>)</p>
+  <p>These procedures test whether the codepoint of <em>char1</em>
+  is equal to, less than, greater than, less than or equal to, or
+  greater than or equal to the codepoint of <em>char2</em>.</p>
+  <p>The comparison is case-insensitive for ASCII letters, so that
+  any letter in the <code>a..z</code> range is mapped to the same
+  letter in the <code>A..Z</code> range before comparison. For
+  non-letters, and for non-ASCII characters, the codepoint is
+  compared without any case folding. In particular, fancy
+  Unicode-aware case folding is not applied.</p>
+  <p>Note that <em>char1</em> and <em>char2</em> do not need to be
+  of the same type. It is permitted for one of them to be a
+  character object and the other to be an integer.</p>
+  <p>For case-sensitive comparison, the standard character
+  comparison procedures <strong>char=?</strong> etc. as well as the
+  standard number and fixnum comparison procedures
+  <strong>=</strong>, <strong>fx=</strong> etc. work fine for
+  ASCII; hence this SRFI does not provide case-sensitive
+  equivalents.</p>
+  <h3>Case-insensitive string comparison procedures</h3>
+  <p>(<strong>ascii-string-ci=?</strong> <em>string1</em>
+  <em>string2</em>)</p>
+  <p>(<strong>ascii-string-ci&lt;?</strong> <em>string1</em>
+  <em>string2</em>)</p>
+  <p>(<strong>ascii-string-ci&gt;?</strong> <em>string1</em>
+  <em>string2</em>)</p>
+  <p>(<strong>ascii-string-ci&lt;=?</strong> <em>string1</em>
+  <em>string2</em>)</p>
+  <p>(<strong>ascii-string-ci&gt;=?</strong> <em>string1</em>
+  <em>string2</em>)</p>
+  <p>These procedures test whether <em>string1</em> is equal to,
+  less than, greater than, less than or equal to, or greater than
+  or equal to <em>string2</em> when adjacent characters are
+  compared in order from the beginning of the string to the
+  end.</p>
+  <p>The comparison is case-insensitive for ASCII letters, so that
+  any letter in the <code>a..z</code> range is mapped to the same
+  letter in the <code>A..Z</code> range before comparison. For
+  non-letters, and for non-ASCII characters, the codepoint is
+  compared without any case folding. In particular, fancy
+  Unicode-aware case folding is not applied.</p>
+  <p>If the two strings are of different lengths, and their
+  characters are equal all the way up to the length of the shorter
+  string, then the shorter string is considered less than the
+  longer one. Two zero-length strings are considered equal.</p>
+  <p>For case-sensitive comparison, the standard
+  <strong>string=?</strong> etc. work fine for ASCII; hence this
+  SRFI does not provide case-sensitive equivalents.</p>
   <h3>Case conversion procedures</h3>
   <p>(<strong>ascii-upcase</strong> <em>char</em>)</p>
   <p>If <em>char</em> represents an ASCII character in the
@@ -580,15 +772,18 @@
   simplicity, the following examples do not take
   fixnum-to-character conversion into account.</p>
   <pre>
-<code>(define (my-upcase char)   (or (ascii-lower-case-value char #x41 26) char))
-(define (my-downcase char) (or (ascii-upper-case-value char #x61 26) char))</code></pre>
+(define (my-upcase char)
+  (or (ascii-lower-case-value char #x41 26) char))
+
+(define (my-downcase char)
+  (or (ascii-upper-case-value char #x61 26) char))</pre>
   <h3>Number parsing</h3>
   <p>Since there are lots of slightly different number syntaxes,
   this SRFI does not provide procedures to convert between numbers
   and strings. Instead, the transformation procedures let you
   easily roll your own. Here is one way to do it:</p>
   <pre>
-<code>(define (parse-binary-digit  char) (ascii-digit-value char 2))
+(define (parse-binary-digit  char) (ascii-digit-value char 2))
 (define (parse-octal-digit   char) (ascii-digit-value char 8))
 (define (parse-decimal-digit char) (ascii-digit-value char 10))
 
@@ -599,7 +794,7 @@
 
 (define (quote-hex-digit n)
   (cond ((&lt; n 10) (ascii-nth-digit n))
-        ((&lt; n 16) (ascii-nth-lower-case (- n 10)))))</code></pre>
+        ((&lt; n 16) (ascii-nth-lower-case (- n 10)))))</pre>
   <h3>Caesar cipher</h3>
   <p>The Caesar cipher is a naive encryption method used
   successfully in ancient Rome. It involves rotating each letter by
@@ -610,12 +805,13 @@
   ROT13 is a Caesar variant that is its own inverse: a positive
   rotation by 13 is identical to a negative rotation by -13.
   Non-alphabetic characters are left intact.</p>
-  <pre><code>(define (caesar-char rot char)
+  <pre>
+(define (caesar-char rot char)
   (or (let ((n (ascii-lower-case-value char rot 26)))
         (and n (ascii-nth-lower-case n)))
       (let ((n (ascii-upper-case-value char rot 26)))
         (and n (ascii-nth-upper-case n)))
-      char))</code></pre>
+      char))</pre>
   <h3>Strings utility</h3>
   <p>The Unix <code>strings</code> utility reads a binary file,
   looking for contiguous sequences of displayable ASCII bytes and
@@ -625,7 +821,8 @@
   procedure that displays <code>(list-&gt;string (map
   integer-&gt;char (reverse stride)))</code> if <code>stride</code>
   is at least 4 bytes long.</p>
-  <pre><code>(let loop ((stride '()))
+  <pre>
+(let loop ((stride '()))
   (let ((byte (read-u8 port)))
     (cond ((eof-object? byte)
            (show stride))
@@ -633,7 +830,7 @@
            (show stride)
            (loop '()))
           (else
-           (loop (cons byte stride))))))</code></pre>
+           (loop (cons byte stride))))))</pre>
   <h2>Implementation</h2>
   <p>A sample implementation is available at <a class="eponymous"
   href=
@@ -663,10 +860,16 @@
       <p>Gauche (R<sup>7</sup>RS)</p>
     </li>
     <li>
+      <p>Gerbil (R<sup>7</sup>RS)</p>
+    </li>
+    <li>
       <p>Guile (R<sup>6</sup>RS)</p>
     </li>
     <li>
       <p>Ikarus (R<sup>6</sup>RS)</p>
+    </li>
+    <li>
+      <p>IronScheme (R<sup>6</sup>RS)</p>
     </li>
     <li>
       <p>Kawa (R<sup>7</sup>RS)</p>
@@ -687,9 +890,26 @@
       <p>Sagittarius (R<sup>6</sup>RS and R<sup>7</sup>RS)</p>
     </li>
     <li>
+      <p>Vicare (R<sup>6</sup>RS)</p>
+    </li>
+    <li>
       <p>Ypsilon (R<sup>6</sup>RS)</p>
     </li>
   </ul>
+  <h2>Acknowledgements</h2>
+  <p>John Cowan brought helpful knowledge of ASCII and Unicode
+  support in Scheme implementations and encouraged me to add more
+  procedures to make life easier for users. John and Duy Nguyen
+  convinced me to omit character class constants from this SRFI,
+  leaving them to SRFI 14 and its successors. John and Shiro Kawai
+  gave valuable feedback on procedure names. Arthur Gleckler was an
+  encouraging and responsive editor.</p>
+  <p>Since the sample implementation was written specifically for
+  standard R6RS/R7RS, it unearthed several gotchas in the murkier
+  corners of Scheme implementations' R6RS/R7RS support. A big thank
+  you to the developers of Cyclone, Gerbil and IronScheme for being
+  extremely responsive and helpful and taking great care of their
+  implementations.</p>
   <h2>Copyright</h2>
   <p>Copyright © Lassi Kortela (2019).</p>
   <p>Permission is hereby granted, free of charge, to any person

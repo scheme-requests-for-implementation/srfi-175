@@ -1,3 +1,6 @@
+;; Copyright 2019 Lassi Kortela
+;; SPDX-License-Identifier: MIT
+
 (import (scheme base) (scheme file) (scheme read) (scheme write) (srfi 175))
 
 (define-syntax want
@@ -107,6 +110,28 @@
                        (ascii-mirror-bracket cc)))))))
     (loop (+ cc 1))))
 
+(let outer ((a 0))
+  (when (< a 26)
+    (let inner ((b 0))
+      (if (= b 26)
+          (outer (+ a 1))
+          (begin (want (= a b)  (ascii-ci=?
+                                 (ascii-nth-lower-case a)
+                                 (ascii-nth-upper-case b)))
+                 (want (< a b)  (ascii-ci<?
+                                 (ascii-nth-lower-case a)
+                                 (ascii-nth-upper-case b)))
+                 (want (<= a b) (ascii-ci<=?
+                                 (ascii-nth-lower-case a)
+                                 (ascii-nth-upper-case b)))
+                 (want (> a b)  (ascii-ci>?
+                                 (ascii-nth-lower-case a)
+                                 (ascii-nth-upper-case b)))
+                 (want (>= a b) (ascii-ci>=?
+                                 (ascii-nth-lower-case a)
+                                 (ascii-nth-upper-case b)))
+                 (inner (+ b 1)))))))
+
 (want #f (ascii-char? -1))
 (want #f (ascii-char? #x80))
 (want #f (ascii-char? (integer->char #x80)))
@@ -200,3 +225,27 @@
                     ascii-upper-case?
                     ascii-lower-case?
                     decimal-numeric?))
+
+(define (check-string-ci a b cmp)
+  (want (= cmp 0) (ascii-string-ci=? a b))
+  (want (< cmp 0) (ascii-string-ci<? a b))
+  (want (> cmp 0) (ascii-string-ci>? a b))
+  (want (<= cmp 0) (ascii-string-ci<=? a b))
+  (want (>= cmp 0) (ascii-string-ci>=? a b)))
+
+(check-string-ci "" "" 0)
+(check-string-ci "a" "a" 0)
+(check-string-ci "A" "a" 0)
+(check-string-ci "a" "A" 0)
+
+(check-string-ci "a" "b" -1)
+(check-string-ci "b" "a" 1)
+
+(check-string-ci "a" "B" -1)
+(check-string-ci "B" "a" 1)
+
+(check-string-ci "aa" "aa" 0)
+(check-string-ci "aa" "ab" -1)
+(check-string-ci "ab" "aa" 1)
+(check-string-ci "aa" "aaa" -1)
+(check-string-ci "aaa" "aa" 1)
