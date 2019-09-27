@@ -132,6 +132,9 @@
                                  (ascii-nth-upper-case b)))
                  (inner (+ b 1)))))))
 
+(ascii-ci>? #\A #\_)
+(ascii-ci>? #\Z #\_)
+
 (want #f (ascii-char? -1))
 (want #f (ascii-char? #x80))
 (want #f (ascii-char? (integer->char #x80)))
