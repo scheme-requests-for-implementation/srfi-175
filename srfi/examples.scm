@@ -29,14 +29,14 @@
                 (newline)
                 #t)))
   (let loop ((stride '()) (n 20))
-    (when (> n 0)
-      (let ((byte (read-u8 byte-port)))
-        (cond ((eof-object? byte)
-               (disp stride))
-              ((not (ascii-display? byte))
-               (loop '() (if (disp stride) (- n 1) n)))
-              (else
-               (loop (cons byte stride) n)))))))
+    (and (> n 0)
+         (let ((byte (read-u8 byte-port)))
+           (cond ((eof-object? byte)
+                  (disp stride))
+                 ((not (ascii-display? byte))
+                  (loop '() (if (disp stride) (- n 1) n)))
+                 (else
+                  (loop (cons byte stride) n)))))))
 
 ;;
 
