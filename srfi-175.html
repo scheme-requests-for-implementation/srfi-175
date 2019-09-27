@@ -582,9 +582,12 @@
   <p>Note that <em>char1</em> and <em>char2</em> do not need to be
   of the same type. It is permitted for one of them to be a
   character object and the other to be an integer.</p>
-  <p>For case-sensitive comparison, the standard
-  <strong>char=?</strong> etc. work fine for ASCII; hence this SRFI
-  does not provide case-sensitive equivalents.</p>
+  <p>For case-sensitive comparison, the standard character
+  comparison procedures <strong>char=?</strong> etc. as well as the
+  standard number and fixnum comparison procedures
+  <strong>=</strong>, <strong>fx=</strong> etc. work fine for
+  ASCII; hence this SRFI does not provide case-sensitive
+  equivalents.</p>
   <h3>Case-insensitive string comparison procedures</h3>
   <p>(<strong>ascii-string-ci=?</strong> <em>string1</em>
   <em>string2</em>)</p>
@@ -599,7 +602,8 @@
   <p>These procedures test whether <em>string1</em> is equal to,
   less than, greater than, less than or equal to, or greater than
   or equal to <em>string2</em> when adjacent characters are
-  compared in order from left to right.</p>
+  compared in order from the beginning of the string to the
+  end.</p>
   <p>The comparison is case-insensitive for ASCII letters, so that
   any letter in the <code>a..z</code> range is mapped to the same
   letter in the <code>A..Z</code> range before comparison. For
