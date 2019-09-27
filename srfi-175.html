@@ -574,12 +574,14 @@
   <p>These procedures test whether the codepoint of <em>char1</em>
   is equal to, less than, greater than, less than or equal to, or
   greater than or equal to the codepoint of <em>char2</em>.</p>
-  <p>The comparison is case-insensitive for ASCII letters, so that
-  any letter in the <code>a..z</code> range is mapped to the same
-  letter in the <code>A..Z</code> range before comparison. For
-  non-letters, and for non-ASCII characters, the codepoint is
-  compared without any case folding. In particular, fancy
-  Unicode-aware case folding is not applied.</p>
+  <p>The comparison is case-insensitive. Specifically, ASCII
+  upper-case letters are converted to their lower-case equivalents
+  before the codepoints are compared. Mapping upper-case to
+  lower-case matches the standard Unicode case-folding algorithm.
+  The direction of folding is important when comparing a letter and
+  a non-letter to find out which is less than the other. These
+  procedures do not apply any case-folding to non-ASCII
+  characters.</p>
   <p>Note that <em>char1</em> and <em>char2</em> do not need to be
   of the same type. It is permitted for one of them to be a
   character object and the other to be an integer.</p>
@@ -602,19 +604,16 @@
   <em>string2</em>)</p>
   <p>These procedures test whether <em>string1</em> is equal to,
   less than, greater than, less than or equal to, or greater than
-  or equal to <em>string2</em> when adjacent characters are
-  compared in order from the beginning of the string to the
-  end.</p>
-  <p>The comparison is case-insensitive for ASCII letters, so that
-  any letter in the <code>a..z</code> range is mapped to the same
-  letter in the <code>A..Z</code> range before comparison. For
-  non-letters, and for non-ASCII characters, the codepoint is
-  compared without any case folding. In particular, fancy
-  Unicode-aware case folding is not applied.</p>
-  <p>If the two strings are of different lengths, and their
-  characters are equal all the way up to the length of the shorter
-  string, then the shorter string is considered less than the
-  longer one. Two zero-length strings are considered equal.</p>
+  or equal to <em>string2</em>.</p>
+  <p>Each pair of adjacent characters between <em>string1</em> and
+  <em>string2</em> is compared as with <strong>ascii-ci=?</strong>,
+  <strong>ascii-ci&lt;?</strong>, etc. Comparison stops when either
+  strings ends, or when an unequal pair of characters is found. If
+  the two strings are of different lengths, and their characters
+  are equal all the way up to the length of the shorter string,
+  then the shorter string is considered less than the longer one. A
+  zero-length string is considered less than a non-zero-length
+  string. Two zero-length strings are considered equal.</p>
   <p>For case-sensitive comparison, the standard
   <strong>string=?</strong> etc. work fine for ASCII; hence this
   SRFI does not provide case-sensitive equivalents.</p>
