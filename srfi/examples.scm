@@ -24,18 +24,19 @@
 
 (define (strings byte-port)
   (define (disp stride)
-    (when (>= (length stride) 4)
-      (display (list->string (map integer->char (reverse stride))))
-      (newline)))
-  (let loop ((stride '()))
-    (let ((byte (read-u8 byte-port)))
-      (cond ((eof-object? byte)
-             (disp stride))
-            ((not (ascii-display? byte))
-             (disp stride)
-             (loop '()))
-            (else
-             (loop (cons byte stride)))))))
+    (and (>= (length stride) 4)
+         (begin (display (list->string (map integer->char (reverse stride))))
+                (newline)
+                #t)))
+  (let loop ((stride '()) (n 20))
+    (when (> n 0)
+      (let ((byte (read-u8 byte-port)))
+        (cond ((eof-object? byte)
+               (disp stride))
+              ((not (ascii-display? byte))
+               (loop '() (if (disp stride) (- n 1) n)))
+              (else
+               (loop (cons byte stride) n)))))))
 
 ;;
 
