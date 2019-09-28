@@ -126,6 +126,8 @@
                  (ascii-ci>=? (ascii-nth-lower-case a)
                               (ascii-nth-upper-case b)))
            (inner (fx+ b 1)))))))
+(ascii-ci>? #\A #\_)
+(ascii-ci>? #\Z #\_)
 (want #f (ascii-char? -1))
 (want #f (ascii-char? 128))
 (want #f (ascii-char? (integer->char 128)))
