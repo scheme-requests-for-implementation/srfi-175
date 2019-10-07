@@ -41,7 +41,111 @@
   protocols are all ASCII. Such low-level code can run faster and
   its behavior can be easier to understand when it uses ASCII
   primitives.</p>
-  <h2>Rationale</h2>
+  <h2>Table of contents</h2>
+  <ul>
+    <li>
+      <a href="#_rationale">Rationale</a>
+      <ul>
+        <li>
+          <a href="#_characters_as_integers">Characters as
+          integers</a>
+        </li>
+        <li>
+          <a href="#_procedure_equivalence">Procedure
+          equivalence</a>
+        </li>
+        <li>
+          <a href="#_capsule_history_of_ascii">Capsule history of
+          ASCII</a>
+        </li>
+        <li>
+          <a href="#_ascii_character_table">ASCII character
+          table</a>
+        </li>
+        <li>
+          <a href="#_ascii_character_classes">ASCII character
+          classes</a>
+        </li>
+        <li>
+          <a href="#_letter_and_number_transformations">Letter and
+          number transformations</a>
+        </li>
+      </ul>
+    </li>
+    <li>
+      <a href="#_specification">Specification</a>
+      <ul>
+        <li>
+          <a href="#_numerical_limits">Numerical limits</a>
+        </li>
+        <li>
+          <a href=
+          "#_predicates_to_test_for_ascii_vs_non_ascii_objects">Predicates
+          to test for ASCII vs non-ASCII objects</a>
+        </li>
+        <li>
+          <a href=
+          "#_predicates_to_test_for_subsets_of_ascii">Predicates to
+          test for subsets of ASCII</a>
+        </li>
+        <li>
+          <a href=
+          "#_subset_predicates_with_standard_scheme_equivalents">Subset
+          predicates with standard Scheme equivalents</a>
+        </li>
+        <li>
+          <a href=
+          "#_case_insensitive_character_comparison_procedures">Case-insensitive
+          character comparison procedures</a>
+        </li>
+        <li>
+          <a href=
+          "#_case_insensitive_string_comparison_procedures">Case-insensitive
+          string comparison procedures</a>
+        </li>
+        <li>
+          <a href="#_case_conversion_procedures">Case conversion
+          procedures</a>
+        </li>
+        <li>
+          <a href="#_bracket_matching_procedures">Bracket matching
+          procedures</a>
+        </li>
+        <li>
+          <a href="#_control_character_display_procedures">Control
+          character display procedures</a>
+        </li>
+        <li>
+          <a href="#_transformation_procedures">Transformation
+          procedures</a>
+        </li>
+      </ul>
+    </li>
+    <li>
+      <a href="#_examples">Examples</a>
+      <ul>
+        <li>
+          <a href="#_case_conversion">Case conversion</a>
+        </li>
+        <li>
+          <a href="#_number_parsing">Number parsing</a>
+        </li>
+        <li>
+          <a href="#_caesar_cipher">Caesar cipher</a>
+        </li>
+        <li>
+          <a href="#_strings_utility">Strings utility</a>
+        </li>
+      </ul>
+    </li>
+    <li>
+      <a href="#_implementation">Implementation</a>
+    </li>
+    <li>
+      <a href="#_acknowledgements">Acknowledgements</a>
+    </li>
+  </ul>
+  <h2 id="_rationale">Rationale</h2>
   <p>Procedures dealing with character objects have been included
   in standard Scheme since R<sup>2</sup>RS (1985) with identical
   arguments and return values. The early Scheme reports did not
@@ -55,7 +159,7 @@
   and their behavior is much easier to understand than their
   Unicode equivalents. They have shorter code paths with fewer and
   simpler failure modes, and need no lookup tables.</p>
-  <h3>Characters as integers</h3>
+  <h3 id="_characters_as_integers">Characters as integers</h3>
   <p>Scheme has a standard character data type which is very useful
   for disambiguating between characters and integers. However, code
   dealing with low-level binary formats typically uses byte ports
@@ -72,7 +176,7 @@
   non-ASCII-superset character set we could think of is EBCDIC,
   which is fringe enough that it does not seem worth worrying about
   it.</p>
-  <h3>Procedure equivalence</h3>
+  <h3 id="_procedure_equivalence">Procedure equivalence</h3>
   <p>The following table lists all procedures defined in this SRFI
   that have direct equivalents in the Scheme R<sup>n</sup>RS
   standards.</p>
@@ -315,7 +419,7 @@
   SRFI accept integers in addition to character objects. However,
   <strong>ascii-char?</strong> like the standard
   <strong>char?</strong> only tests for a character object.</p>
-  <h3>Capsule history of ASCII</h3>
+  <h3 id="_capsule_history_of_ascii">Capsule history of ASCII</h3>
   <p>The ASCII (American Standard Code for Information Interchange)
   character set is standardized by ANSI (American National
   Standards Institute). The present ASCII standard was first
@@ -341,7 +445,7 @@
   and in numerous other places. Of particular interest is that
   these histories explain why the allocation of character codes is
   almost perfectly logical but not quite.</p>
-  <h3>ASCII character table</h3>
+  <h3 id="_ascii_character_table">ASCII character table</h3>
   <pre>
 #x00 NUL  #x10 DLE  #x20    #x30 0  #x40 @  #x50 P  #x60 `  #x70 p
 #x01 SOH  #x11 DC1  #x21 !  #x31 1  #x41 A  #x51 Q  #x61 a  #x71 q
@@ -359,14 +463,15 @@
 #x0d CR   #x1d GS   #x2d -  #x3d =  #x4d M  #x5d ]  #x6d m  #x7d }
 #x0e SO   #x1e RS   #x2e .  #x3e &gt;  #x4e N  #x5e ^  #x6e n  #x7e ~
 #x0f SI   #x1f US   #x2f /  #x3f ?  #x4f O  #x5f _  #x6f o  #x7f DEL</pre>
-  <h3>ASCII character classes</h3>
+  <h3 id="_ascii_character_classes">ASCII character classes</h3>
   <pre>
 #x00..#x1f  control         #x20        space
 #x21..#x2f  punctuation     #x30..#x39  digit
 #x3a..#x40  punctuation     #x41..#x5a  upper-case
 #x5b..#x60  punctuation     #x61..#x7a  lower-case
 #x7b..#x7e  punctuation     #x7f        control</pre>
-  <h3>Letter and number transformations</h3>
+  <h3 id="_letter_and_number_transformations">Letter and number
+  transformations</h3>
   <p>Many letter and number tasks are naturally expressed by
   treating decimal digits and the Latin alphabet as integer ranges.
   Recall that characters themselves are just integer codes under
@@ -451,8 +556,8 @@
   rotations. The <strong>ascii-nth-digit</strong> combinator does
   not do rotations, since once again those are less useful on
   digits.</p>
-  <h2>Specification</h2>
-  <h3>Numerical limits</h3>
+  <h2 id="_specification">Specification</h2>
+  <h3 id="_numerical_limits">Numerical limits</h3>
   <p>Let the <em>char-fix</em> range be an implementation-defined
   range of exact integer values such that:</p>
   <ul>
@@ -481,7 +586,8 @@
   fixnum procedures with the <code>fx</code> prefix. In a Scheme
   implementation where some codepoints are bigger than a fixnum,
   generic math has to be used.</p>
-  <h3>Predicates to test for ASCII vs non-ASCII objects</h3>
+  <h3 id="_predicates_to_test_for_ascii_vs_non_ascii_objects">
+  Predicates to test for ASCII vs non-ASCII objects</h3>
   <p>(<strong>ascii-codepoint?</strong> <em>obj</em>)</p>
   <p>Returns <code>#t</code> if <em>obj</em> is an exact integer in
   the inclusive range <code>#x00..#x7f</code>. Else returns
@@ -501,7 +607,8 @@
   contains no character with a codepoint outside the inclusive
   range <code>#x00..#x7f</code>. Else returns <code>#f</code>.</p>
   <p>A zero-length string is considered an ASCII string.</p>
-  <h3>Predicates to test for subsets of ASCII</h3>
+  <h3 id="_predicates_to_test_for_subsets_of_ascii">Predicates to
+  test for subsets of ASCII</h3>
   <p>(<strong>ascii-control?</strong> <em>char</em>)</p>
   <p>Returns <code>#t</code> if <em>char</em> represents an ASCII
   character in the <em>control</em> class. Else returns
@@ -533,7 +640,8 @@
   <p>Returns <code>#t</code> if <em>char</em> represents an ASCII
   character in the <em>upper-case</em> or <em>lower-case</em> or
   <em>digit</em> class. Else returns <code>#f</code>.</p>
-  <h3>Subset predicates with standard Scheme equivalents</h3>
+  <h3 id="_subset_predicates_with_standard_scheme_equivalents">
+  Subset predicates with standard Scheme equivalents</h3>
   <p>(<strong>ascii-alphabetic?</strong> <em>char</em>)</p>
   <p>Returns <code>#t</code> if <em>char</em> represents an ASCII
   character in the <em>upper-case</em> or <em>lower-case</em>
@@ -560,7 +668,8 @@
   <p>Returns <code>#t</code> if <em>char</em> represents an ASCII
   character in the <em>lower-case</em> class. Else returns
   <code>#f</code>.</p>
-  <h3>Case-insensitive character comparison procedures</h3>
+  <h3 id="_case_insensitive_character_comparison_procedures">
+  Case-insensitive character comparison procedures</h3>
   <p>(<strong>ascii-ci=?</strong> <em>char1</em>
   <em>char2</em>)</p>
   <p>(<strong>ascii-ci&lt;?</strong> <em>char1</em>
@@ -591,7 +700,8 @@
   <strong>=</strong>, <strong>fx=</strong> etc. work fine for
   ASCII; hence this SRFI does not provide case-sensitive
   equivalents.</p>
-  <h3>Case-insensitive string comparison procedures</h3>
+  <h3 id="_case_insensitive_string_comparison_procedures">
+  Case-insensitive string comparison procedures</h3>
   <p>(<strong>ascii-string-ci=?</strong> <em>string1</em>
   <em>string2</em>)</p>
   <p>(<strong>ascii-string-ci&lt;?</strong> <em>string1</em>
@@ -617,7 +727,8 @@
   <p>For case-sensitive comparison, the standard
   <strong>string=?</strong> etc. work fine for ASCII; hence this
   SRFI does not provide case-sensitive equivalents.</p>
-  <h3>Case conversion procedures</h3>
+  <h3 id="_case_conversion_procedures">Case conversion
+  procedures</h3>
   <p>(<strong>ascii-upcase</strong> <em>char</em>)</p>
   <p>If <em>char</em> represents an ASCII character in the
   <em>lower-case</em> class, returns the same letter from the
@@ -632,7 +743,8 @@
   unchanged.</p>
   <p><em>char</em> can be a character object or an integer; the
   same type of object is returned.</p>
-  <h3>Bracket matching procedures</h3>
+  <h3 id="_bracket_matching_procedures">Bracket matching
+  procedures</h3>
   <p>ASCII includes four pairs of open and close brackets:</p>
   <table>
     <tr>
@@ -685,7 +797,8 @@
   </ul>
   <p><em>char</em> can be a character object or an integer; the
   same type of object is returned.</p>
-  <h3>Control character display procedures</h3>
+  <h3 id="_control_character_display_procedures">Control character
+  display procedures</h3>
   <p>Every ASCII control character has a corresponding display
   character. The control characters <code>#x00..#x1f</code> are
   displayed as <code>@ A B C ... X Y Z [ \ ] ^ _</code>. The
@@ -709,7 +822,8 @@
   character. Else returns <code>#f</code>.</p>
   <p><em>char</em> can be a character object or an integer; the
   same type of object is returned.</p>
-  <h3>Transformation procedures</h3>
+  <h3 id="_transformation_procedures">Transformation
+  procedures</h3>
   <p>These procedures serve as versatile building blocks for
   various letter and number transformations.</p>
   <p>(<strong>ascii-nth-digit</strong> <em>n</em>)</p>
@@ -765,8 +879,8 @@
   to it; give an <em>offset</em> of 0 to add nothing.</p>
   <p>If <em>char</em> does not represent an acceptable letter,
   <code>#f</code> is returned.</p>
-  <h2>Examples</h2>
-  <h3>Case conversion</h3>
+  <h2 id="_examples">Examples</h2>
+  <h3 id="_case_conversion">Case conversion</h3>
   <p>The case conversion procedures in this SRFI can be implemented
   in terms of the letter transformation procedures. For the sake of
   simplicity, the following examples do not take
@@ -777,7 +891,7 @@
 
 (define (my-downcase char)
   (or (ascii-upper-case-value char #x61 26) char))</pre>
-  <h3>Number parsing</h3>
+  <h3 id="_number_parsing">Number parsing</h3>
   <p>Since there are lots of slightly different number syntaxes,
   this SRFI does not provide procedures to convert between numbers
   and strings. Instead, the transformation procedures let you
@@ -795,7 +909,7 @@
 (define (quote-hex-digit n)
   (cond ((&lt; n 10) (ascii-nth-digit n))
         ((&lt; n 16) (ascii-nth-lower-case (- n 10)))))</pre>
-  <h3>Caesar cipher</h3>
+  <h3 id="_caesar_cipher">Caesar cipher</h3>
   <p>The Caesar cipher is a naive encryption method used
   successfully in ancient Rome. It involves rotating each letter by
   <em>rot</em> alphabet positions so that it becomes another
@@ -812,7 +926,7 @@
       (let ((n (ascii-upper-case-value char rot 26)))
         (and n (ascii-nth-upper-case n)))
       char))</pre>
-  <h3>Strings utility</h3>
+  <h3 id="_strings_utility">Strings utility</h3>
   <p>The Unix <code>strings</code> utility reads a binary file,
   looking for contiguous sequences of displayable ASCII bytes and
   showing each sequence as it is found. The idea is to find
@@ -831,7 +945,7 @@
            (loop '()))
           (else
            (loop (cons byte stride))))))</pre>
-  <h2>Implementation</h2>
+  <h2 id="_implementation">Implementation</h2>
   <p>A sample implementation is available at:</p>
   <p><a class="eponymous" href=
   "https://github.com/scheme-requests-for-implementation/srfi-175">github.com/scheme-requests-for-implementation/srfi-175</a></p>
@@ -896,7 +1010,7 @@
       <p>Ypsilon (R<sup>6</sup>RS)</p>
     </li>
   </ul>
-  <h2>Acknowledgements</h2>
+  <h2 id="_acknowledgements">Acknowledgements</h2>
   <p>John Cowan brought helpful knowledge of ASCII and Unicode
   support in Scheme implementations and encouraged me to add more
   procedures to make life easier for users. John and Duy Nguyen
@@ -911,7 +1025,7 @@
   extremely responsive and helpful and taking great care of their
   implementations.</p>
   <h2>Copyright</h2>
-  <p>Copyright © Lassi Kortela (2019).</p>
+  <p>Copyright © Lassi Kortela (2019)</p>
   <p>Permission is hereby granted, free of charge, to any person
   obtaining a copy of this software and associated documentation
   files (the “Software”), to deal in the Software without
