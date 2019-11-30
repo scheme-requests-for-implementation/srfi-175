@@ -7,10 +7,10 @@
           ascii-string?
 
           ascii-control?
-          ascii-display?
+          ascii-non-control?
           ascii-whitespace?
           ascii-space-or-tab?
-          ascii-punctuation?
+          ascii-other-graphic?
           ascii-upper-case?
           ascii-lower-case?
           ascii-alphabetic?

@@ -40,15 +40,15 @@
 (want #f (ascii-bytevector?
           (string->utf8 (make-string 1 (integer->char #x80)))))
 
-(want #t (ascii-display? #\space))
-(want #f (ascii-display? #\tab))
-(want #f (ascii-display? #\newline))
-(want #f (ascii-display? (integer->char #x0d)))
+(want #t (ascii-non-control? #\space))
+(want #f (ascii-non-control? #\tab))
+(want #f (ascii-non-control? #\newline))
+(want #f (ascii-non-control? (integer->char #x0d)))
 
 (want #t (ascii-space-or-tab? #\space))
 (want #t (ascii-space-or-tab? #\tab))
 (want #f (ascii-space-or-tab? #\newline))
-(want #f (ascii-display? (integer->char #x0d)))
+(want #f (ascii-non-control? (integer->char #x0d)))
 
 (let ((lowers "abcdefghijklmnopqrstuvwxyz")
       (uppers "ABCDEFGHIJKLMNOPQRSTUVWXYZ"))
@@ -79,15 +79,15 @@
            (want #f (ascii-lower-case? (ascii-upcase cc)))
            (want #f (ascii-upper-case? (ascii-downcase cc)))
            (want #t (ascii-alphanumeric? cc))
-           (want #t (ascii-display? cc))
-           (want #f (ascii-punctuation? cc))
+           (want #t (ascii-non-control? cc))
+           (want #f (ascii-other-graphic? cc))
            (want #f (ascii-control? cc))
            (want #f (ascii-numeric? cc 10))
            (want #f (ascii-whitespace? cc))
            (want #f (ascii-space-or-tab? cc)))
           ((ascii-control? cc)
-           (want #f (ascii-display? cc))
-           (want #f (ascii-punctuation? cc))
+           (want #f (ascii-non-control? cc))
+           (want #f (ascii-other-graphic? cc))
            (want cc
                  (ascii-display->control
                   (ascii-control->display cc)))
@@ -209,22 +209,22 @@
 (want #t (union? ascii-alphanumeric? ascii-alphabetic? decimal-numeric?))
 (want #t (union? ascii-alphabetic? ascii-upper-case? ascii-lower-case?))
 
-(want #t (subset? ascii-space-or-tab?  ascii-whitespace?))
-(want #t (subset? ascii-punctuation?   ascii-display?))
-(want #t (subset? ascii-upper-case?    ascii-alphabetic? ascii-display?))
-(want #t (subset? ascii-lower-case?    ascii-alphabetic? ascii-display?))
-(want #t (subset? ascii-alphabetic?    ascii-alphanumeric? ascii-display?))
-(want #t (subset? decimal-numeric?     ascii-alphanumeric? ascii-display?))
-(want #t (subset? ascii-alphanumeric?  ascii-display?))
+(want #t (subset? ascii-space-or-tab? ascii-whitespace?))
+(want #t (subset? ascii-other-graphic? ascii-non-control?))
+(want #t (subset? ascii-upper-case?   ascii-alphabetic? ascii-non-control?))
+(want #t (subset? ascii-lower-case?   ascii-alphabetic? ascii-non-control?))
+(want #t (subset? ascii-alphabetic?   ascii-alphanumeric? ascii-non-control?))
+(want #t (subset? decimal-numeric?    ascii-alphanumeric? ascii-non-control?))
+(want #t (subset? ascii-alphanumeric? ascii-non-control?))
 
-(want #t (disjoint? ascii-control? ascii-display?))
+(want #t (disjoint? ascii-control? ascii-non-control?))
 (want #t (disjoint? ascii-whitespace?
-                    ascii-punctuation?
+                    ascii-other-graphic?
                     ascii-upper-case?
                     ascii-lower-case?
                     decimal-numeric?))
 (want #t (disjoint? ascii-control?
-                    ascii-punctuation?
+                    ascii-other-graphic?
                     ascii-upper-case?
                     ascii-lower-case?
                     decimal-numeric?))

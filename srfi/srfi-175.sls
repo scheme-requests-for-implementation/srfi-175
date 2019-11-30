@@ -8,10 +8,10 @@
                  ascii-char?
                  ascii-string?
                  ascii-control?
-                 ascii-display?
+                 ascii-non-control?
                  ascii-whitespace?
                  ascii-space-or-tab?
-                 ascii-punctuation?
+                 ascii-other-graphic?
                  ascii-upper-case?
                  ascii-lower-case?
                  ascii-alphabetic?
@@ -72,14 +72,14 @@
                             (and (fx<? (char->integer char) 128) (check)))))))))
          (define (ascii-control? x)
            (let ((cc (ensure-int x))) (or (fx<=? 0 cc 31) (fx=? cc 127))))
-         (define (ascii-display? x)
+         (define (ascii-non-control? x)
            (let ((cc (ensure-int x))) (fx<=? 32 cc 126)))
          (define (ascii-whitespace? x)
            (let ((cc (ensure-int x)))
              (cond ((fx<? cc 9) #f) ((fx<? cc 14) #t) (else (fx=? cc 32)))))
          (define (ascii-space-or-tab? x)
            (let ((cc (ensure-int x))) (case cc ((9 32) #t) (else #f))))
-         (define (ascii-punctuation? x)
+         (define (ascii-other-graphic? x)
            (let ((cc (ensure-int x)))
              (or (fx<=? 33 cc 47)
                  (fx<=? 58 cc 64)

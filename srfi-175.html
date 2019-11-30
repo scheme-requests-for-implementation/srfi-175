@@ -68,6 +68,26 @@
           classes</a>
         </li>
         <li>
+          <a href="#_terminological_problems">Terminological
+          problems</a>
+          <ul>
+            <li>
+              <a href=
+              "#_graphic_printable_and_control_characters">Graphic,
+              printable and control characters</a>
+            </li>
+            <li>
+              <a href=
+              "#_punctuation_and_symbol_characters">Punctuation and
+              symbol characters</a>
+            </li>
+            <li>
+              <a href="#_horizontal_whitespace">Horizontal
+              whitespace</a>
+            </li>
+          </ul>
+        </li>
+        <li>
           <a href="#_letter_and_number_transformations">Letter and
           number transformations</a>
         </li>
@@ -113,8 +133,9 @@
           procedures</a>
         </li>
         <li>
-          <a href="#_control_character_display_procedures">Control
-          character display procedures</a>
+          <a href=
+          "#_control_character_conversion_procedures">Control
+          character conversion procedures</a>
         </li>
         <li>
           <a href="#_transformation_procedures">Transformation
@@ -346,11 +367,65 @@
 #x0f SI   #x1f US   #x2f /  #x3f ?  #x4f O  #x5f _  #x6f o  #x7f DEL</pre>
   <h3 id="_ascii_character_classes">ASCII character classes</h3>
   <pre>
-#x00..#x1f  control         #x20        space
-#x21..#x2f  punctuation     #x30..#x39  digit
-#x3a..#x40  punctuation     #x41..#x5a  upper-case
-#x5b..#x60  punctuation     #x61..#x7a  lower-case
-#x7b..#x7e  punctuation     #x7f        control</pre>
+#x00..#x1f  control                #x20        space
+#x21..#x2f  punctuation/symbol     #x30..#x39  digit
+#x3a..#x40  punctuation/symbol     #x41..#x5a  upper-case
+#x5b..#x60  punctuation/symbol     #x61..#x7a  lower-case
+#x7b..#x7e  punctuation/symbol     #x7f        control</pre>
+  <h3 id="_terminological_problems">Terminological problems</h3>
+  <h4 id="_graphic_printable_and_control_characters">Graphic,
+  printable and control characters</h4>Intuitively, a <em>graphic
+  character</em> is supposed to be any character that would cause a
+  printer to plot ink on paper. A <em>printable character</em> (or
+  <em>printing character</em>) would be any character that takes up
+  space (whether or not it plots ink). Therefore graphic characters
+  are letters, numbers, punctuation, symbols, etc. Printable
+  characters are the same plus some subset of whitespace
+  characters.
+  <p>The practical interpretation is not that simple. Depending on
+  who you ask, ASCII space counts as a graphic character, a control
+  character, or neither.</p>
+  <p>Common Lisp has a standard <code>graphic-char-p</code>
+  predicate that counts space as graphic. The standard also says
+  newline is <em>not</em> a graphic character. It is silent on tab
+  and other whitespace characters, but several implementations say
+  those are not graphic either. Common Lisp does not have a
+  separate notion of printable or control characters, but does talk
+  about <em>non-graphic</em> characters.</p>
+  <p>Python's <code>str.isprintable()</code> predicate considers
+  space printable but not any other ASCII whitespace. Python does
+  not have a separate notion of graphic characters.</p>
+  <p>The C <code>iscntrl()</code>, <code>isgraph()</code> and
+  <code>isprint()</code> predicates regard space as a printable
+  character but not a graphic or control character. All other ASCII
+  whitespace characters are regarded as control characters but not
+  graphic or printable.</p>
+  <p>Since the distinction between graphic and printable characters
+  is confusing to laypeople, most of the world seems to want a
+  predicate to check for graphic characters as well as space, and
+  that set of characters is the complement of the set of control
+  characters, this SRFI specifies an <b>ascii-non-control?</b>
+  predicate as the least ambiguous choice. The predicate is not a
+  simple complement of <b>ascii-control?</b> since the complement
+  of <b>ascii-control?</b> would include non-ASCII characters
+  whereas <b>ascii-non-control?</b> excludes them.</p>
+  <h4 id="_punctuation_and_symbol_characters">Punctuation and
+  symbol characters</h4>
+  <p>The C standard library's <code>ispunct()</code> predicate
+  considers all non-alphanumeric, non-whitespace ASCII graphic
+  characters to be punctuation. However, Unicode makes a
+  distinction between punctuation and <em>symbol</em> characters.
+  The distinction is roughly that punctuation belongs to a given
+  script whereas symbols are script-independent. Since this is
+  esoteric to laypeople whereas <em>punctuation</em> is ambiguous
+  to Unicode experts, this SRFI avoids both terms and opts for an
+  <b>ascii-other-graphic?</b> predicate.</p>
+  <h4 id="_horizontal_whitespace">Horizontal whitespace</h4>
+  <p>ASCII has only two horizontal whitespace characters: space and
+  tab. This SRFI has a <b>ascii-space-or-tab?</b> predicate. While
+  the name is somewhat clumsy,
+  <code>ascii-horizontal-whitespace?</code> would be too
+  verbose.</p>
   <h3 id="_letter_and_number_transformations">Letter and number
   transformations</h3>
   <p>Many letter and number tasks are naturally expressed by
@@ -480,16 +555,13 @@
   <code>#f</code>.</p>
   <p>Note that carriage return, line feed and tab are control
   characters but space is not.</p>
-  <p>(<strong>ascii-display?</strong> <em>char</em>)</p>
+  <p>(<strong>ascii-non-control?</strong> <em>char</em>)</p>
   <p>Returns <code>#t</code> if <em>char</em> represents an ASCII
   character that is <strong>not</strong> in the <em>control</em>
   class. Else returns <code>#f</code>.</p>
-  <p>The point is that display characters are safe to write to a
+  <p>The point is that these characters are safe to write to a
   device that may not be able to sensibly interpret control
   characters or non-ASCII characters.</p>
-  <p>Note that we consider space to be a display character but not
-  tab, carriage return or line feed. This convention is popular but
-  not universal.</p>
   <p>(<strong>ascii-space-or-tab?</strong> <em>char</em>)</p>
   <p>Returns <code>#t</code> if <em>char</em> represents an ASCII
   character with the integer value <code>#x09</code> (tab) or
@@ -497,9 +569,9 @@
   <p>The point is that space and tab are very often useful to
   distinguish from other whitespace characters, notably
   newlines.</p>
-  <p>(<strong>ascii-punctuation?</strong> <em>char</em>)</p>
+  <p>(<strong>ascii-other-graphic?</strong> <em>char</em>)</p>
   <p>Returns <code>#t</code> if <em>char</em> represents an ASCII
-  character in the <em>punctuation</em> class. Else returns
+  character in the <em>punctuation/symbol</em> class. Else returns
   <code>#f</code>.</p>
   <p>(<strong>ascii-alphanumeric?</strong> <em>char</em>)</p>
   <p>Returns <code>#t</code> if <em>char</em> represents an ASCII
@@ -662,27 +734,27 @@
   </ul>
   <p><em>char</em> can be a character object or an integer; the
   same type of object is returned.</p>
-  <h3 id="_control_character_display_procedures">Control character
-  display procedures</h3>
-  <p>Every ASCII control character has a corresponding display
-  character. The control characters <code>#x00..#x1f</code> are
-  displayed as <code>@ A B C ... X Y Z [ \ ] ^ _</code>. The
-  control character <code>#x7f</code> is displayed as
-  <code>?</code>. For example, when you press
-  Control-<code>A</code> in a Unix terminal, the program running in
-  the terminal receives the ASCII character <code>#x01</code>.
+  <h3 id="_control_character_conversion_procedures">Control
+  character conversion procedures</h3>
+  <p>Every ASCII control character has a canonical mapping to a
+  corresponding graphic character. The control characters
+  <code>#x00..#x1f</code> map to the graphic characters <code>@ A B
+  C ... X Y Z [ \ ] ^ _</code>. The control character
+  <code>#x7f</code> maps to <code>?</code>. For example, when you
+  press Control-<code>A</code> in a Unix terminal, the program
+  running in the terminal receives the character <code>#x01</code>.
   Control-<code>A</code> is sometimes written <code>^A</code>.
   Likewise, Control-<code>@</code> can be written as
-  <code>^@</code> and Control-<code>^</code> as <code>^^</code>,
-  etc.</p>
-  <p>(<strong>ascii-control-&gt;display</strong> <em>char</em>)</p>
-  <p>If <em>char</em> represents an ASCII character in the
-  <em>control</em> class, returns the corresponding display
-  character as above. Else returns <code>#f</code>.</p>
+  <code>^@</code> and Control-<code>\</code> as <code>^\</code> and
+  Control-<code>^</code> as <code>^^</code>, etc.</p>
+  <p>(<strong>ascii-control-&gt;graphic</strong> <em>char</em>)</p>
+  <p>If <em>char</em> represents an ASCII control character,
+  returns the corresponding graphic character as above. Else
+  returns <code>#f</code>.</p>
   <p><em>char</em> can be a character object or an integer; the
   same type of object is returned.</p>
-  <p>(<strong>ascii-display-&gt;control</strong> <em>char</em>)</p>
-  <p>If <em>char</em> represents one of the ASCII display
+  <p>(<strong>ascii-graphic-&gt;control</strong> <em>char</em>)</p>
+  <p>If <em>char</em> represents one of the ASCII graphic
   characters given above, returns the corresponding control
   character. Else returns <code>#f</code>.</p>
   <p><em>char</em> can be a character object or an integer; the
@@ -793,19 +865,20 @@
       char))</pre>
   <h3 id="_strings_utility">Strings utility</h3>
   <p>The Unix <code>strings</code> utility reads a binary file,
-  looking for contiguous sequences of displayable ASCII bytes and
-  showing each sequence as it is found. The idea is to find
-  human-readable text in the file. The following is the main loop
-  of <code>strings</code>. It relies on a <code>show</code> helper
-  procedure that displays <code>(list-&gt;string (map
-  integer-&gt;char (reverse stride)))</code> if <code>stride</code>
-  is at least 4 bytes long.</p>
+  looking for contiguous spans of ASCII graphic characters
+  (including spaces) and showing each sequence as it is found. The
+  idea is to find human-readable text in the file. The following is
+  the main loop of <code>strings</code>. It relies on a
+  <code>show</code> helper procedure that displays
+  <code>(list-&gt;string (map integer-&gt;char (reverse
+  stride)))</code> if <code>stride</code> is at least 4 bytes
+  long.</p>
   <pre>
 (let loop ((stride '()))
   (let ((byte (read-u8 port)))
     (cond ((eof-object? byte)
            (show stride))
-          ((not (ascii-display? byte))
+          ((not (ascii-non-control? byte))
            (show stride)
            (loop '()))
           (else

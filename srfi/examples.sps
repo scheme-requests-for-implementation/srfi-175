@@ -30,7 +30,7 @@
     (and (fx>? n 0)
          (let ((byte (get-u8 byte-port)))
            (cond ((eof-object? byte) (disp stride))
-                 ((not (ascii-display? byte))
+                 ((not (ascii-non-control? byte))
                   (loop '() (if (disp stride) (fx- n 1) n)))
                  (else (loop (cons byte stride) n)))))))
 (define (span a b)

@@ -45,7 +45,7 @@
   (let ((cc (ensure-int x)))
     (or (<= 0 cc #x1f) (= cc #x7f))))
 
-(define (ascii-display? x)
+(define (ascii-non-control? x)
   (let ((cc (ensure-int x)))
     (<= #x20 cc #x7e)))
 
@@ -59,7 +59,7 @@
   (let ((cc (ensure-int x)))
     (case cc ((#x09 #x20) #t) (else #f))))
 
-(define (ascii-punctuation? x)
+(define (ascii-other-graphic? x)
   (let ((cc (ensure-int x)))
     (or (<= #x21 cc #x2f)
         (<= #x3a cc #x40)
