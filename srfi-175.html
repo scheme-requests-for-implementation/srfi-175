@@ -129,13 +129,13 @@
           procedures</a>
         </li>
         <li>
-          <a href="#_bracket_matching_procedures">Bracket matching
-          procedures</a>
-        </li>
-        <li>
           <a href=
           "#_control_character_conversion_procedures">Control
           character conversion procedures</a>
+        </li>
+        <li>
+          <a href="#_bracket_matching_procedures">Bracket matching
+          procedures</a>
         </li>
         <li>
           <a href="#_transformation_procedures">Transformation
@@ -680,6 +680,31 @@
   unchanged.</p>
   <p><em>char</em> can be a character object or an integer; the
   same type of object is returned.</p>
+  <h3 id="_control_character_conversion_procedures">Control
+  character conversion procedures</h3>
+  <p>Every ASCII control character has a canonical mapping to a
+  corresponding graphic character. The control characters
+  <code>#x00..#x1f</code> map to the graphic characters <code>@ A B
+  C ... X Y Z [ \ ] ^ _</code>. The control character
+  <code>#x7f</code> maps to <code>?</code>. For example, when you
+  press Control-<code>A</code> in a Unix terminal, the program
+  running in the terminal receives the character <code>#x01</code>.
+  Control-<code>A</code> is sometimes written <code>^A</code>.
+  Likewise, Control-<code>@</code> can be written as
+  <code>^@</code> and Control-<code>\</code> as <code>^\</code> and
+  Control-<code>^</code> as <code>^^</code>, etc.</p>
+  <p>(<strong>ascii-control-&gt;graphic</strong> <em>char</em>)</p>
+  <p>If <em>char</em> represents an ASCII control character,
+  returns the corresponding graphic character as above. Else
+  returns <code>#f</code>.</p>
+  <p><em>char</em> can be a character object or an integer; the
+  same type of object is returned.</p>
+  <p>(<strong>ascii-graphic-&gt;control</strong> <em>char</em>)</p>
+  <p>If <em>char</em> represents one of the ASCII graphic
+  characters given above, returns the corresponding control
+  character. Else returns <code>#f</code>.</p>
+  <p><em>char</em> can be a character object or an integer; the
+  same type of object is returned.</p>
   <h3 id="_bracket_matching_procedures">Bracket matching
   procedures</h3>
   <p>ASCII includes four pairs of open and close brackets:</p>
@@ -732,31 +757,6 @@
     the same pair.</li>
     <li>Else returns <code>#f</code>.</li>
   </ul>
-  <p><em>char</em> can be a character object or an integer; the
-  same type of object is returned.</p>
-  <h3 id="_control_character_conversion_procedures">Control
-  character conversion procedures</h3>
-  <p>Every ASCII control character has a canonical mapping to a
-  corresponding graphic character. The control characters
-  <code>#x00..#x1f</code> map to the graphic characters <code>@ A B
-  C ... X Y Z [ \ ] ^ _</code>. The control character
-  <code>#x7f</code> maps to <code>?</code>. For example, when you
-  press Control-<code>A</code> in a Unix terminal, the program
-  running in the terminal receives the character <code>#x01</code>.
-  Control-<code>A</code> is sometimes written <code>^A</code>.
-  Likewise, Control-<code>@</code> can be written as
-  <code>^@</code> and Control-<code>\</code> as <code>^\</code> and
-  Control-<code>^</code> as <code>^^</code>, etc.</p>
-  <p>(<strong>ascii-control-&gt;graphic</strong> <em>char</em>)</p>
-  <p>If <em>char</em> represents an ASCII control character,
-  returns the corresponding graphic character as above. Else
-  returns <code>#f</code>.</p>
-  <p><em>char</em> can be a character object or an integer; the
-  same type of object is returned.</p>
-  <p>(<strong>ascii-graphic-&gt;control</strong> <em>char</em>)</p>
-  <p>If <em>char</em> represents one of the ASCII graphic
-  characters given above, returns the corresponding control
-  character. Else returns <code>#f</code>.</p>
   <p><em>char</em> can be a character object or an integer; the
   same type of object is returned.</p>
   <h3 id="_transformation_procedures">Transformation
@@ -921,7 +921,8 @@
   <h2 id="_acknowledgements">Acknowledgements</h2>
   <p>John Cowan brought helpful knowledge of ASCII and Unicode
   support in Scheme implementations and encouraged me to add more
-  procedures to make life easier for users. John and Duy Nguyen
+  procedures to make life easier for users. He also helped greatly
+  in clearing up the terminological confusion. John and Duy Nguyen
   convinced me to omit character class constants from this SRFI,
   leaving them to SRFI 14 and its successors. John and Shiro Kawai
   gave valuable feedback on procedure names. Arthur Gleckler was an
