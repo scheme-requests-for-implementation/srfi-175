@@ -98,6 +98,10 @@
       <a href="#_specification">Specification</a>
       <ul>
         <li>
+          <a href="#_ascii_and_non_ascii_arguments">ASCII and
+          non-ASCII arguments</a>
+        </li>
+        <li>
           <a href="#_numerical_limits">Numerical limits</a>
         </li>
         <li>
@@ -498,6 +502,11 @@
   not do rotations, since once again those are less useful on
   digits.</p>
   <h2 id="_specification">Specification</h2>
+  <h3 id="_ascii_and_non_ascii_arguments">ASCII and non-ASCII
+  arguments</h3>
+  <p>Callers may freely pass ASCII as well as non-ASCII characters
+  to all procedures defined in this SRFI. The specification is
+  written such that the result is well-defined in both cases.</p>
   <h3 id="_numerical_limits">Numerical limits</h3>
   <p>Let the <em>char-fix</em> range be an implementation-defined
   range of exact integer values such that:</p>
