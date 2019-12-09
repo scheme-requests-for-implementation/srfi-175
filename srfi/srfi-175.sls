@@ -27,8 +27,6 @@
                  ascii-downcase
                  ascii-control->display
                  ascii-display->control
-                 ascii-open-bracket
-                 ascii-close-bracket
                  ascii-mirror-bracket
                  ascii-ci=?
                  ascii-ci<?
@@ -50,9 +48,6 @@
          (define (char->int->char map-int char)
            (let ((int (map-int (char->integer char))))
              (and int (integer->char int))))
-         (define (int->char->int map-char int)
-           (let ((char (map-char (integer->char int))))
-             (and char (char->integer char))))
          (define (ascii-codepoint? x)
            (and (integer? x) (exact? x) (fx<=? 0 x 127)))
          (define (ascii-char? x) (and (char? x) (fx<? (char->integer x) 128)))
@@ -124,28 +119,20 @@
            (if (char? x)
                (char->int->char ascii-display->control x)
                (or (and (fx<=? 64 x 95) (fx- x 64)) (and (fx=? x 63) 127))))
-         (define (ascii-open-bracket char)
-           (case char
-             ((#\( #\[ #\{ #\<) char)
-             (else
-              (and (integer? char) (int->char->int ascii-open-bracket char)))))
-         (define (ascii-close-bracket char)
-           (case char
-             ((#\) #\] #\} #\>) char)
-             (else
-              (and (integer? char) (int->char->int ascii-close-bracket char)))))
          (define (ascii-mirror-bracket char)
-           (case char
-             ((#\() #\))
-             ((#\)) #\()
-             ((#\[) #\])
-             ((#\]) #\[)
-             ((#\{) #\})
-             ((#\}) #\{)
-             ((#\<) #\>)
-             ((#\>) #\<)
-             (else
-              (and (integer? char) (int->char->int ascii-mirror-bracket char)))))
+           (if (integer? char)
+               (let ((char (ascii-mirror-bracket (integer->char char))))
+                 (and char (char->integer char)))
+               (case char
+                 ((#\() #\))
+                 ((#\)) #\()
+                 ((#\[) #\])
+                 ((#\]) #\[)
+                 ((#\{) #\})
+                 ((#\}) #\{)
+                 ((#\<) #\>)
+                 ((#\>) #\<)
+                 (else #f))))
          (define (ascii-ci-cmp char1 char2)
            (let ((cc1 (ensure-int char1)) (cc2 (ensure-int char2)))
              (when (fx<=? 65 cc1 90) (set! cc1 (fx+ cc1 32)))
