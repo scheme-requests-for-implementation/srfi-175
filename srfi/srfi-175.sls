@@ -25,8 +25,8 @@
                  ascii-nth-lower-case
                  ascii-upcase
                  ascii-downcase
-                 ascii-control->display
-                 ascii-display->control
+                 ascii-control->graphic
+                 ascii-graphic->control
                  ascii-mirror-bracket
                  ascii-ci=?
                  ascii-ci<?
@@ -111,13 +111,13 @@
            (if (char? x)
                (integer->char (ascii-downcase (char->integer x)))
                (or (ascii-upper-case-value x 97 26) x)))
-         (define (ascii-control->display x)
+         (define (ascii-control->graphic x)
            (if (char? x)
-               (char->int->char ascii-control->display x)
+               (char->int->char ascii-control->graphic x)
                (or (and (fx<=? 0 x 31) (fx+ x 64)) (and (fx=? x 127) 63))))
-         (define (ascii-display->control x)
+         (define (ascii-graphic->control x)
            (if (char? x)
-               (char->int->char ascii-display->control x)
+               (char->int->char ascii-graphic->control x)
                (or (and (fx<=? 64 x 95) (fx- x 64)) (and (fx=? x 63) 127))))
          (define (ascii-mirror-bracket char)
            (if (integer? char)

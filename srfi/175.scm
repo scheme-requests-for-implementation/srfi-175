@@ -114,15 +114,15 @@
       (integer->char (ascii-downcase (char->integer x)))
       (or (ascii-upper-case-value x #x61 26) x)))
 
-(define (ascii-control->display x)
+(define (ascii-control->graphic x)
   (if (char? x)
-      (char->int->char ascii-control->display x)
+      (char->int->char ascii-control->graphic x)
       (or (and (<= 0 x #x1f) (+ x #x40))
           (and (= x #x7f) #x3f))))
 
-(define (ascii-display->control x)
+(define (ascii-graphic->control x)
   (if (char? x)
-      (char->int->char ascii-display->control x)
+      (char->int->char ascii-graphic->control x)
       (or (and (<= #x40 x #x5f) (- x #x40))
           (and (= x #x3f) #x7f))))
 
