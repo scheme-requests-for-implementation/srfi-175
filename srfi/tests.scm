@@ -89,11 +89,11 @@
            (want #f (ascii-non-control? cc))
            (want #f (ascii-other-graphic? cc))
            (want cc
-                 (ascii-display->control
-                  (ascii-control->display cc)))
+                 (ascii-graphic->control
+                  (ascii-control->graphic cc)))
            (want (integer->char cc)
-                 (ascii-display->control
-                  (ascii-control->display (integer->char cc)))))
+                 (ascii-graphic->control
+                  (ascii-control->graphic (integer->char cc)))))
           ((member cc '(#\( #\) #\[ #\] #\{ #\} #\< #\>))
            (want cc (ascii-mirror-bracket (ascii-mirror-bracket cc)))))
     (loop (+ cc 1))))

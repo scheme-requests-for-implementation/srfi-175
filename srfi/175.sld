@@ -25,8 +25,8 @@
           ascii-nth-lower-case
           ascii-upcase
           ascii-downcase
-          ascii-control->display
-          ascii-display->control
+          ascii-control->graphic
+          ascii-graphic->control
           ascii-mirror-bracket
 
           ascii-ci=?
