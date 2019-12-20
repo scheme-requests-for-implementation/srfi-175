@@ -857,11 +857,9 @@
   Non-alphabetic characters are left intact.</p>
   <pre>
 (define (caesar-char rot char)
-  (or (let ((n (ascii-lower-case-value char rot 26)))
-        (and n (ascii-nth-lower-case n)))
-      (let ((n (ascii-upper-case-value char rot 26)))
-        (and n (ascii-nth-upper-case n)))
-      char))</pre>
+  (cond ((ascii-lower-case-value char rot 26) =&gt; ascii-nth-lower-case)
+        ((ascii-upper-case-value char rot 26) =&gt; ascii-nth-upper-case)
+        (else char)))</pre>
   <h3 id="_strings_utility">Strings utility</h3>
   <p>The Unix <code>strings</code> utility reads a binary file,
   looking for contiguous spans of ASCII graphic characters

@@ -9,11 +9,9 @@
       (ascii-lower-case-value char 10 6)))
 
 (define (caesar-char rot char)
-  (or (let ((n (ascii-upper-case-value char rot 26)))
-        (and n (ascii-nth-upper-case n)))
-      (let ((n (ascii-lower-case-value char rot 26)))
-        (and n (ascii-nth-lower-case n)))
-      char))
+  (cond ((ascii-lower-case-value char rot 26) => ascii-nth-lower-case)
+        ((ascii-upper-case-value char rot 26) => ascii-nth-upper-case)
+        (else char)))
 
 (define (caesar rotation s)
   (let loop ((i 0) (chars '()))
