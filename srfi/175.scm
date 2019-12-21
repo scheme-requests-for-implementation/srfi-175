@@ -16,7 +16,7 @@
 ;;
 
 (define (ascii-codepoint? x)
-  (and (integer? x) (exact? x) (<= 0 x #x7f)))
+  (and (exact-integer? x) (<= 0 x #x7f)))
 
 (define (ascii-char? x)
   (and (char? x) (< (char->integer x) #x80)))
@@ -126,11 +126,9 @@
       (or (and (<= #x40 x #x5f) (- x #x40))
           (and (= x #x3f) #x7f))))
 
-(define (ascii-mirror-bracket char)
-  (if (integer? char)
-      (let ((char (ascii-mirror-bracket (integer->char char))))
-        (and char (char->integer char)))
-      (case char
+(define (ascii-mirror-bracket x)
+  (if (char? x)
+      (case x
         ((#\() #\))
         ((#\)) #\()
         ((#\[) #\])
@@ -139,7 +137,9 @@
         ((#\}) #\{)
         ((#\<) #\>)
         ((#\>) #\<)
-        (else #f))))
+        (else #f))
+      (let ((x (ascii-mirror-bracket (integer->char x))))
+        (and x (char->integer x)))))
 
 (define (ascii-ci-cmp char1 char2)
   (let ((cc1 (ensure-int char1))
