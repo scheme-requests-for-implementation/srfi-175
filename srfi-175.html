@@ -845,8 +845,7 @@
       (ascii-upper-case-value char 10 6)))
 
 (define (quote-hex-digit n)
-  (cond ((&lt; n 10) (ascii-nth-digit n))
-        ((&lt; n 16) (ascii-nth-lower-case (- n 10)))))</pre>
+  (or (ascii-nth-digit n) (ascii-nth-lower-case (- n 10))))</pre>
   <h3 id="_caesar_cipher">Caesar cipher</h3>
   <p>The Caesar cipher is a naive encryption method used
   successfully in ancient Rome. It involves rotating each letter by
@@ -877,11 +876,11 @@
   (let ((byte (read-u8 port)))
     (cond ((eof-object? byte)
            (show stride))
-          ((not (ascii-non-control? byte))
-           (show stride)
-           (loop '()))
+          ((ascii-non-control? byte)
+           (loop (cons byte stride)))
           (else
-           (loop (cons byte stride))))))</pre>
+           (show stride)
+           (loop '())))))</pre>
   <h2 id="_implementation">Implementation</h2>
   <p>A sample implementation is available at:</p>
   <p><a class="eponymous" href=

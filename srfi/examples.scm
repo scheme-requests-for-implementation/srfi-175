@@ -31,10 +31,10 @@
          (let ((byte (read-u8 byte-port)))
            (cond ((eof-object? byte)
                   (disp stride))
-                 ((not (ascii-non-control? byte))
-                  (loop '() (if (disp stride) (- n 1) n)))
+                 ((ascii-non-control? byte)
+                  (loop (cons byte stride) n))
                  (else
-                  (loop (cons byte stride) n)))))))
+                  (loop '() (if (disp stride) (- n 1) n))))))))
 
 ;;
 
