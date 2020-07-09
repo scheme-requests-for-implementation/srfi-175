@@ -81,8 +81,9 @@
         (<= #x41 cc #x5a)
         (<= #x61 cc #x7a))))
 
-(define (ascii-numeric? x radix)
-  (not (not (ascii-digit-value x radix))))
+(define (ascii-numeric? x)
+  (let ((cc (ensure-int x)))
+    (<= #x30 cc #x39)))
 
 ;;
 

@@ -74,7 +74,7 @@
                              (want #t (ascii-non-control? cc))
                              (want #f (ascii-other-graphic? cc))
                              (want #f (ascii-control? cc))
-                             (want #f (ascii-numeric? cc 10))
+                             (want #f (ascii-numeric? cc))
                              (want #f (ascii-whitespace? cc))
                              (want #f (ascii-space-or-tab? cc)))
      ((ascii-control? cc) (want #f (ascii-non-control? cc))
@@ -170,15 +170,14 @@
   (let check ((cc 0))
     (or (fx=? cc 128)
         (and (fx<=? (count-matching predicates cc) 1) (check (fx+ cc 1))))))
-(define (decimal-numeric? x) (ascii-numeric? x 10))
-(want #t (union? ascii-alphanumeric? ascii-alphabetic? decimal-numeric?))
+(want #t (union? ascii-alphanumeric? ascii-alphabetic? ascii-numeric?))
 (want #t (union? ascii-alphabetic? ascii-upper-case? ascii-lower-case?))
 (want #t (subset? ascii-space-or-tab? ascii-whitespace?))
 (want #t (subset? ascii-other-graphic? ascii-non-control?))
 (want #t (subset? ascii-upper-case? ascii-alphabetic? ascii-non-control?))
 (want #t (subset? ascii-lower-case? ascii-alphabetic? ascii-non-control?))
 (want #t (subset? ascii-alphabetic? ascii-alphanumeric? ascii-non-control?))
-(want #t (subset? decimal-numeric? ascii-alphanumeric? ascii-non-control?))
+(want #t (subset? ascii-numeric? ascii-alphanumeric? ascii-non-control?))
 (want #t (subset? ascii-alphanumeric? ascii-non-control?))
 (want #t (disjoint? ascii-control? ascii-non-control?))
 (want #t
@@ -186,13 +185,13 @@
                  ascii-other-graphic?
                  ascii-upper-case?
                  ascii-lower-case?
-                 decimal-numeric?))
+                 ascii-numeric?))
 (want #t
       (disjoint? ascii-control?
                  ascii-other-graphic?
                  ascii-upper-case?
                  ascii-lower-case?
-                 decimal-numeric?))
+                 ascii-numeric?))
 (define (check-string-ci a b cmp)
   (want (fx=? cmp 0) (ascii-string-ci=? a b))
   (want (fx<? cmp 0) (ascii-string-ci<? a b))
