@@ -45,6 +45,12 @@
 (want #f (ascii-space-or-tab? #\
 ))
 (want #f (ascii-non-control? (integer->char 13)))
+(want #f (ascii-non-control? (integer->char 0)))
+(want #f (ascii-non-control? (integer->char 31)))
+(want #t (ascii-non-control? (integer->char 32)))
+(want #t (ascii-non-control? (integer->char 126)))
+(want #f (ascii-non-control? (integer->char 127)))
+(want #f (ascii-non-control? (integer->char 128)))
 (let ((lowers "abcdefghijklmnopqrstuvwxyz")
       (uppers "ABCDEFGHIJKLMNOPQRSTUVWXYZ"))
   (let loop ((i 0))
